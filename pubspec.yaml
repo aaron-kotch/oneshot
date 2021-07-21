@@ -80,6 +80,11 @@ flutter:
         - asset: assets/fonts/CenturyGothic/Century-Gothic.ttf
           weight: 400
 
+    - family: SegoeUI
+      fonts:
+        - asset: assets/fonts/SegoeUI/Segoe UI.ttf
+          weight: 400
+
   # fonts:
   #   - family: Schyler
   #     fonts:
