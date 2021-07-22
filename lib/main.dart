@@ -41,6 +41,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        systemNavigationBarColor: Color(0xff1E1E1E),
+        statusBarColor: Color(0xff1E1E1E),
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarIconBrightness: Brightness.light
+    ));
+
     var width = MediaQuery.of(context).size.width;
 
     return SafeArea(
@@ -260,10 +268,7 @@ Route createProject() {
 
         return SlideTransition(
           position: tween.animate(animation),
-          child: SlideTransition(
-            position: secondTween.animate(secondaryAnimation),
-            child: child,
-          ),
+          child: child,
         );
       }
   );

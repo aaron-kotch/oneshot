@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:oneshot/aboveTheLine.dart';
 import 'package:oneshot/classes/Projects.dart';
 import 'package:oneshot/main.dart';
+import 'package:oneshot/productionExpenses.dart';
+import 'package:oneshot/projectBottomSheet.dart';
 
 class NewProject extends StatefulWidget {
   const NewProject({Key? key}) : super(key: key);
@@ -43,6 +47,12 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
 
     Color textColor = Color(0xffD2480A);
     Color subTextColor = Color(0xff999999);
+    Color borderColor = Color(0xff0E0E0E);
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        systemNavigationBarColor: Color(0xff171717),
+        systemNavigationBarIconBrightness: Brightness.light
+    ));
 
     return SafeArea(
         child: Scaffold(
@@ -51,204 +61,89 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
             onTap: () {
               FocusScope.of(context).requestFocus(new FocusNode());
             },
-            child: SingleChildScrollView(
-              child: Container(
-                alignment: Alignment.topCenter,
-                width: width,
-                height: height,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 28, left: 16, right: 16),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(
-                                Icons.arrow_back_ios_rounded,
-                                size: 20,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+            child: Container(
+              alignment: Alignment.topCenter,
+              width: width,
+              height: height,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 28, left: 16, right: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(
+                              Icons.arrow_back_ios_rounded,
+                              size: 20,
+                              color: Colors.white,
                             ),
-                            Container(
-                              child: Text(
-                                'Budget Sheet',
-                                style: TextStyle(
-                                  fontFamily: 'Calibri',
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 24,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.keyboard_control_rounded,
-                                size: 20,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {
-                                showModalBottomSheet(
-                                    backgroundColor: Color(0xff131212),
-                                    context: context,
-                                    builder: (context) {
-                                      return Container(
-                                        padding: EdgeInsets.only(top: 8),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            ListTile(
-                                                leading: Icon(Icons.share, color: textColor),
-                                                title: Text(
-                                                  "Share Project",
-                                                  style: TextStyle(
-                                                    fontFamily: 'Inter',
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 16,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                                onTap: () {
-                                                  saveProject();
-                                                  Navigator.popUntil(context, (route) => route.isFirst);
-                                                }
-                                            ),
-                                            ListTile(
-                                              leading: ImageIcon(
-                                                AssetImage("assets/icons/export.png"),
-                                                color: textColor,
-                                              ),
-                                              title: Text(
-                                                "Export Project",
-                                                style: TextStyle(
-                                                  fontFamily: 'Inter',
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 16,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                            ListTile(
-                                              leading: ImageIcon(
-                                                AssetImage("assets/icons/duplicate.png"),
-                                                color: textColor,
-                                              ),
-                                              title: Text(
-                                                "Duplicate Project",
-                                                style: TextStyle(
-                                                  fontFamily: 'Inter',
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 16,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                            ListTile(
-                                              leading: ImageIcon(
-                                                AssetImage("assets/icons/copy.png"),
-                                                color: textColor,
-                                              ),
-                                              title: Text(
-                                                "Copy to Another Project",
-                                                style: TextStyle(
-                                                  fontFamily: 'Inter',
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 16,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                            ListTile(
-                                              leading: Icon(Icons.print, color: textColor),
-                                              title: Text(
-                                                "Print Project",
-                                                style: TextStyle(
-                                                  fontFamily: 'Inter',
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 16,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                            ListTile(
-                                              leading: Icon(Icons.delete, color: textColor),
-                                              title: Text(
-                                                "Delete Project",
-                                                style: TextStyle(
-                                                  fontFamily: 'Inter',
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 16,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(top: 8),
-                                              child: ListTile(
-                                                leading: Icon(Icons.close, color: textColor),
-                                                title: Text(
-                                                  "Cancel",
-                                                  style: TextStyle(
-                                                    fontFamily: 'Inter',
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 16,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                  border: Border(
-                                                      top: BorderSide(
-                                                          color: Colors.white,
-                                                          width: 0.1
-                                                      )
-                                                  )
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    });
-                              },
-                            )
-                          ],
-                        ),
-                      ),
-                    ), // top actions bar
-                    Container(
-                      child: TabBar(
-                        controller: _tabController,
-                        tabs: [
-                          Tab(text: "Project"),
-                          Tab(text: "Budget"),
-                        ],
-                        labelStyle: TextStyle(
-                            fontFamily: 'SegoeUI',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                            color: Colors.white
-                        ),
-                        isScrollable: true,
-                        indicator: UnderlineTabIndicator(
-                          borderSide: BorderSide(
-                            color: Color(0xffDD410D),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
                           ),
-                          insets: EdgeInsets.symmetric(horizontal: 20),
-                        ),
+                          Container(
+                            child: Text(
+                              'Budget Sheet',
+                              style: TextStyle(
+                                fontFamily: 'Calibri',
+                                fontWeight: FontWeight.w300,
+                                fontSize: 24,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.keyboard_control_rounded,
+                              size: 20,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              showModalBottomSheet(
+                                backgroundColor: Color(0xff131212),
+                                context: context,
+                                builder: (context) {
+                                  return ProjectBottomSheet();
+                              });
+                            },
+                          )
+                        ],
                       ),
-                    ), // tab bar
-                    Expanded(
-                      child: TabBarView(
-                          controller: _tabController,
-                          children: <Widget>[
-                            Container(
+                    ),
+                  ), // top actions bar
+                  Container(
+                    child: TabBar(
+                      controller: _tabController,
+                      tabs: [
+                        Tab(text: "Project"),
+                        Tab(text: "Budget"),
+                      ],
+                      labelStyle: TextStyle(
+                          fontFamily: 'SegoeUI',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          color: Colors.white
+                      ),
+                      isScrollable: true,
+                      indicator: UnderlineTabIndicator(
+                        borderSide: BorderSide(
+                          color: Color(0xffDD410D),
+                        ),
+                        insets: EdgeInsets.symmetric(horizontal: 20),
+                      ),
+                    ),
+                  ), // tab bar
+                  Expanded(
+                    child: TabBarView(
+                        controller: _tabController,
+                        children: <Widget>[
+                          SingleChildScrollView(
+                            child: Container(
                               padding: EdgeInsets.only(top: 24, bottom: 24, left: 24, right: 24),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -602,14 +497,493 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                 ],
                               ),
                             ),
-                            Container(
-                              child: Text("p"),
-                            ),
-                          ]
-                      ),
-                    )
-                  ],
-                ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
+                                  child: ListView(
+                                    shrinkWrap: true,
+                                    children: <Widget>[
+                                      ListTile(
+                                        contentPadding: EdgeInsets.zero,
+                                        title: Container(
+                                          padding: const EdgeInsets.only(top: 24, bottom: 24, left: 32, right: 32),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Row(
+                                                    children: <Widget>[
+                                                      CircleAvatar(
+                                                        backgroundColor: Color(0xffDD410D),
+                                                        radius: 5,
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets.only(left: 8),
+                                                        child: Text(
+                                                          "Above The Line",
+                                                          style: TextStyle(
+                                                            fontFamily: 'Inter',
+                                                            fontWeight: FontWeight.w400,
+                                                            fontSize: 16,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(top: 4, left: 18),
+                                                    child: Text(
+                                                      "\$ 15,000",
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontWeight: FontWeight.w400,
+                                                        fontSize: 30,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Icon(
+                                                    Icons.person,
+                                                    size: 25,
+                                                    color: Colors.white,
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(left: 4, right: 8),
+                                                    child: Text(
+                                                      "10",
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontWeight: FontWeight.w400,
+                                                        fontSize: 24,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.of(context).push(toAboveTheLine());
+                                        },
+                                      ), // above the line
+                                      ListTile(
+                                        minVerticalPadding: 0,
+                                        contentPadding: EdgeInsets.zero,
+                                        title: Container(
+                                          padding: const EdgeInsets.only(left: 32, right: 32),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                border: Border(
+                                                    top: BorderSide(color: borderColor, width: 1)
+                                                )
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(top: 24, bottom: 24),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Row(
+                                                        children: <Widget>[
+                                                          CircleAvatar(
+                                                            backgroundColor: Color(0xffDD410D),
+                                                            radius: 5,
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets.only(left: 8),
+                                                            child: Text(
+                                                              "Production",
+                                                              style: TextStyle(
+                                                                fontFamily: 'Inter',
+                                                                fontWeight: FontWeight.w400,
+                                                                fontSize: 16,
+                                                                color: Colors.white,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets.only(top: 4, left: 18),
+                                                        child: Text(
+                                                          "\$ 60,000",
+                                                          style: TextStyle(
+                                                            fontFamily: 'Inter',
+                                                            fontWeight: FontWeight.w400,
+                                                            fontSize: 30,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: <Widget>[
+                                                      Icon(
+                                                        Icons.person,
+                                                        size: 25,
+                                                        color: Colors.white,
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets.only(left: 4, right: 8),
+                                                        child: Text(
+                                                          "20",
+                                                          style: TextStyle(
+                                                            fontFamily: 'Inter',
+                                                            fontWeight: FontWeight.w400,
+                                                            fontSize: 24,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.of(context).push(toProductionExpenses());
+                                        },
+                                      ), // post production
+                                      ListTile(
+                                        minVerticalPadding: 0,
+                                        contentPadding: EdgeInsets.zero,
+                                        title: Padding(
+                                          padding: const EdgeInsets.only(left: 32, right: 32),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                border: Border(
+                                                    top: BorderSide(color: borderColor, width: 1)
+                                                )
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(top: 24, bottom: 24),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Row(
+                                                        children: <Widget>[
+                                                          CircleAvatar(
+                                                            backgroundColor: Color(0xffDD410D),
+                                                            radius: 5,
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets.only(left: 8),
+                                                            child: Text(
+                                                              "Post Production",
+                                                              style: TextStyle(
+                                                                fontFamily: 'Inter',
+                                                                fontWeight: FontWeight.w400,
+                                                                fontSize: 16,
+                                                                color: Colors.white,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets.only(top: 4, left: 18),
+                                                        child: Text(
+                                                          "\$ 15,000",
+                                                          style: TextStyle(
+                                                            fontFamily: 'Inter',
+                                                            fontWeight: FontWeight.w400,
+                                                            fontSize: 30,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: <Widget>[
+                                                      Icon(
+                                                        Icons.person,
+                                                        size: 25,
+                                                        color: Colors.white,
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets.only(left: 4, right: 8),
+                                                        child: Text(
+                                                          "10",
+                                                          style: TextStyle(
+                                                            fontFamily: 'Inter',
+                                                            fontWeight: FontWeight.w400,
+                                                            fontSize: 24,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+
+                                        },
+                                      ), // post production
+                                      ListTile(
+                                        minVerticalPadding: 0,
+                                        contentPadding: EdgeInsets.zero,
+                                        title: Padding(
+                                          padding: const EdgeInsets.only(left: 32, right: 32),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                border: Border(
+                                                    top: BorderSide(color: borderColor, width: 1)
+                                                )
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(top: 24, bottom: 24),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Row(
+                                                        children: <Widget>[
+                                                          CircleAvatar(
+                                                            backgroundColor: Color(0xffDD410D),
+                                                            radius: 5,
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets.only(left: 8),
+                                                            child: Text(
+                                                              "Other Expenses",
+                                                              style: TextStyle(
+                                                                fontFamily: 'Inter',
+                                                                fontWeight: FontWeight.w400,
+                                                                fontSize: 16,
+                                                                color: Colors.white,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets.only(top: 4, left: 18),
+                                                        child: Text(
+                                                          "\$ 12,000",
+                                                          style: TextStyle(
+                                                            fontFamily: 'Inter',
+                                                            fontWeight: FontWeight.w400,
+                                                            fontSize: 30,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: <Widget>[
+                                                      Icon(
+                                                        Icons.person,
+                                                        size: 25,
+                                                        color: Colors.white,
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets.only(left: 4, right: 8),
+                                                        child: Text(
+                                                          "8",
+                                                          style: TextStyle(
+                                                            fontFamily: 'Inter',
+                                                            fontWeight: FontWeight.w400,
+                                                            fontSize: 24,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+
+                                        },
+                                      ), // other expenses
+                                      ListTile(
+                                        minVerticalPadding: 0,
+                                        contentPadding: EdgeInsets.zero,
+                                        title: Padding(
+                                          padding: const EdgeInsets.only(left: 32, right: 32),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                border: Border(
+                                                    top: BorderSide(color: borderColor, width: 1)
+                                                )
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(top: 24, bottom: 24),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Row(
+                                                        children: <Widget>[
+                                                          CircleAvatar(
+                                                            backgroundColor: Color(0xffDD410D),
+                                                            radius: 5,
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets.only(left: 8),
+                                                            child: Text(
+                                                              "Grand Total",
+                                                              style: TextStyle(
+                                                                fontFamily: 'Inter',
+                                                                fontWeight: FontWeight.w400,
+                                                                fontSize: 16,
+                                                                color: Colors.white,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets.only(top: 4, left: 18),
+                                                        child: Text(
+                                                          "\$ 102,000",
+                                                          style: TextStyle(
+                                                            fontFamily: 'Inter',
+                                                            fontWeight: FontWeight.w400,
+                                                            fontSize: 30,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: <Widget>[
+                                                      Icon(
+                                                        Icons.person,
+                                                        size: 25,
+                                                        color: Colors.white,
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets.only(left: 4, right: 8),
+                                                        child: Text(
+                                                          "48",
+                                                          style: TextStyle(
+                                                            fontFamily: 'Inter',
+                                                            fontWeight: FontWeight.w400,
+                                                            fontSize: 24,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+
+                                        },
+                                      ), // other e
+                                    ],
+                                  ),
+                              ),
+                              Container(
+                                height: 72,
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 76),
+                                color: Color(0xff171717),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.search,
+                                      size: 25,
+                                      color: Colors.white,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        ImageIcon(
+                                          AssetImage("assets/icons/dollar.png"),
+                                          size: 15,
+                                          color: Colors.white,
+                                        ),
+                                        Padding(
+                                            padding: const EdgeInsets.only(left: 12),
+                                            child: Text(
+                                              "Total Amount",
+                                              style: TextStyle(
+                                                fontFamily: 'SegoeUI',
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14,
+                                                color: Color(0xff999999),
+                                              ),
+                                            )
+                                        ),
+                                      ],
+                                    ),
+                                    Icon(
+                                      Icons.add_circle,
+                                      color: textColor,
+                                      size: 30,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ]
+                          ),
+                        ]
+                    ),
+                  )
+                ],
               ),
             ),
           ),
@@ -624,6 +998,42 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
       MyHomePage.projectList.add(project);
     });
   }
+}
+
+Route toAboveTheLine() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => AboveTheLine(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(1, 0);
+      var end = Offset.zero;
+      var curve = Curves.easeInOut;
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
+
+      return SlideTransition(
+        position: tween.animate(animation),
+        child: child,
+      );
+    }
+  );
+}
+
+Route toProductionExpenses() {
+  return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => ProductionExpenses(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(1, 0);
+        var end = Offset.zero;
+        var curve = Curves.easeInOut;
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
+
+        return SlideTransition(
+          position: tween.animate(animation),
+          child: child,
+        );
+      }
+  );
 }
 
 Route toMain() {
