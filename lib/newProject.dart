@@ -2,10 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oneshot/aboveTheLine.dart';
+import 'package:oneshot/budgetListTile.dart';
 import 'package:oneshot/classes/Projects.dart';
 import 'package:oneshot/main.dart';
+import 'package:oneshot/postProductionExpenses.dart';
 import 'package:oneshot/productionExpenses.dart';
 import 'package:oneshot/projectBottomSheet.dart';
+
+import 'otherExpenses.dart';
 
 class NewProject extends StatefulWidget {
   const NewProject({Key? key}) : super(key: key);
@@ -142,360 +146,356 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                     child: TabBarView(
                         controller: _tabController,
                         children: <Widget>[
-                          SingleChildScrollView(
-                            child: Container(
-                              padding: EdgeInsets.only(top: 24, bottom: 24, left: 24, right: 24),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          "Production Company",
-                                          style: TextStyle(
-                                            fontFamily: "Inter",
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w400,
-                                            color: textColor,
-                                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 24, left: 24, right: 24),
+                            child: ListView(
+                              children: <Widget>[
+                                Container(
+                                  padding: EdgeInsets.only(top: 8, bottom: 8),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        "Production Company",
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                          color: textColor,
                                         ),
-                                        Container(
-                                          padding: EdgeInsets.only(top: 4),
-                                          height: 32,
-                                          child: TextField(
-                                            controller: _companyTC,
-                                            style: TextStyle(
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 4),
+                                        height: 32,
+                                        child: TextField(
+                                          controller: _companyTC,
+                                          style: TextStyle(
+                                            fontFamily: "SegoeUI",
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.grey[300],
+                                          ),
+                                          decoration: InputDecoration(
+                                            hintText: "Tap to add company name",
+                                            hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400,
-                                              color: Colors.grey[300],
+                                              color: subTextColor,
                                             ),
-                                            decoration: InputDecoration(
-                                              hintText: "Tap to add company name",
-                                              hintStyle: TextStyle(
-                                                fontFamily: "SegoeUI",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                                color: subTextColor,
-                                              ),
-                                              enabledBorder: InputBorder.none,
-                                              focusedBorder: InputBorder.none,
-                                            ),
-                                            textAlign: TextAlign.left,
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
                                           ),
+                                          textAlign: TextAlign.left,
                                         ),
-                                      ],
-                                    ),
-                                  ), // company
-                                  Container(
-                                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          "Project Title",
+                                      ),
+                                    ],
+                                  ),
+                                ), // company
+                                Container(
+                                  padding: EdgeInsets.only(top: 8, bottom: 8),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        "Project Title",
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                          color: textColor,
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 4),
+                                        height: 32,
+                                        child: TextField(
+                                          controller: _titleTC,
                                           style: TextStyle(
-                                            fontFamily: "Inter",
-                                            fontSize: 18,
+                                            fontFamily: "SegoeUI",
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: textColor,
+                                            color: Colors.grey[300],
                                           ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.only(top: 4),
-                                          height: 32,
-                                          child: TextField(
-                                            controller: _titleTC,
-                                            style: TextStyle(
+                                          decoration: InputDecoration(
+                                            hintText: "Tap to add project title",
+                                            hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400,
-                                              color: Colors.grey[300],
+                                              color: subTextColor,
                                             ),
-                                            decoration: InputDecoration(
-                                              hintText: "Tap to add project title",
-                                              hintStyle: TextStyle(
-                                                fontFamily: "SegoeUI",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                                color: subTextColor,
-                                              ),
-                                              enabledBorder: InputBorder.none,
-                                              focusedBorder: InputBorder.none,
-                                            ),
-                                            textAlign: TextAlign.left,
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
                                           ),
+                                          textAlign: TextAlign.left,
                                         ),
-                                      ],
-                                    ),
-                                  ), // title
-                                  Container(
-                                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          "Prepare By",
+                                      ),
+                                    ],
+                                  ),
+                                ), // title
+                                Container(
+                                  padding: EdgeInsets.only(top: 8, bottom: 8),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        "Prepare By",
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                          color: textColor,
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 4),
+                                        height: 32,
+                                        child: TextField(
+                                          controller: _prepareTC,
                                           style: TextStyle(
-                                            fontFamily: "Inter",
-                                            fontSize: 18,
+                                            fontFamily: "SegoeUI",
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: textColor,
+                                            color: Colors.grey[300],
                                           ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.only(top: 4),
-                                          height: 32,
-                                          child: TextField(
-                                            controller: _prepareTC,
-                                            style: TextStyle(
+                                          decoration: InputDecoration(
+                                            hintText: "Tap to add the name",
+                                            hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400,
-                                              color: Colors.grey[300],
+                                              color: subTextColor,
                                             ),
-                                            decoration: InputDecoration(
-                                              hintText: "Tap to add the name",
-                                              hintStyle: TextStyle(
-                                                fontFamily: "SegoeUI",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                                color: subTextColor,
-                                              ),
-                                              enabledBorder: InputBorder.none,
-                                              focusedBorder: InputBorder.none,
-                                            ),
-                                            textAlign: TextAlign.left,
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
                                           ),
+                                          textAlign: TextAlign.left,
                                         ),
-                                      ],
-                                    ),
-                                  ), // prepare by
-                                  Container(
-                                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          "Budget Dates",
+                                      ),
+                                    ],
+                                  ),
+                                ), // prepare by
+                                Container(
+                                  padding: EdgeInsets.only(top: 8, bottom: 8),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        "Budget Dates",
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                          color: textColor,
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 4),
+                                        height: 32,
+                                        child: TextField(
+                                          controller: _dateTC,
                                           style: TextStyle(
-                                            fontFamily: "Inter",
-                                            fontSize: 18,
+                                            fontFamily: "SegoeUI",
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: textColor,
+                                            color: Colors.grey[300],
                                           ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.only(top: 4),
-                                          height: 32,
-                                          child: TextField(
-                                            controller: _dateTC,
-                                            style: TextStyle(
+                                          decoration: InputDecoration(
+                                            hintText: "01/01/2017",
+                                            hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400,
-                                              color: Colors.grey[300],
+                                              color: subTextColor,
                                             ),
-                                            decoration: InputDecoration(
-                                              hintText: "01/01/2017",
-                                              hintStyle: TextStyle(
-                                                fontFamily: "SegoeUI",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                                color: subTextColor,
-                                              ),
-                                              enabledBorder: InputBorder.none,
-                                              focusedBorder: InputBorder.none,
-                                            ),
-                                            textAlign: TextAlign.left,
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
                                           ),
+                                          textAlign: TextAlign.left,
                                         ),
-                                      ],
-                                    ),
-                                  ), // budget dates
-                                  Container(
-                                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          "Shoot Days",
+                                      ),
+                                    ],
+                                  ),
+                                ), // budget dates
+                                Container(
+                                  padding: EdgeInsets.only(top: 8, bottom: 8),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        "Shoot Days",
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                          color: textColor,
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 4),
+                                        height: 32,
+                                        child: TextField(
+                                          controller: _daysTC,
+                                          keyboardType: TextInputType.number,
                                           style: TextStyle(
-                                            fontFamily: "Inter",
-                                            fontSize: 18,
+                                            fontFamily: "SegoeUI",
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: textColor,
+                                            color: Colors.grey[300],
                                           ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.only(top: 4),
-                                          height: 32,
-                                          child: TextField(
-                                            controller: _daysTC,
-                                            keyboardType: TextInputType.number,
-                                            style: TextStyle(
+                                          decoration: InputDecoration(
+                                            hintText: "Tap to add the number of shoot days",
+                                            hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400,
-                                              color: Colors.grey[300],
+                                              color: subTextColor,
                                             ),
-                                            decoration: InputDecoration(
-                                              hintText: "Tap to add the number of shoot days",
-                                              hintStyle: TextStyle(
-                                                fontFamily: "SegoeUI",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                                color: subTextColor,
-                                              ),
-                                              enabledBorder: InputBorder.none,
-                                              focusedBorder: InputBorder.none,
-                                            ),
-                                            textAlign: TextAlign.left,
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
                                           ),
+                                          textAlign: TextAlign.left,
                                         ),
-                                      ],
-                                    ),
-                                  ), // shoot days
-                                  Container(
-                                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          "Producers",
+                                      ),
+                                    ],
+                                  ),
+                                ), // shoot days
+                                Container(
+                                  padding: EdgeInsets.only(top: 8, bottom: 8),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        "Producers",
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                          color: textColor,
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 4),
+                                        height: 32,
+                                        child: TextField(
+                                          controller: _producersTC,
                                           style: TextStyle(
-                                            fontFamily: "Inter",
-                                            fontSize: 18,
+                                            fontFamily: "SegoeUI",
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: textColor,
+                                            color: Colors.grey[300],
                                           ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.only(top: 4),
-                                          height: 32,
-                                          child: TextField(
-                                            controller: _producersTC,
-                                            style: TextStyle(
+                                          decoration: InputDecoration(
+                                            hintText: "Tap to add producers name",
+                                            hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400,
-                                              color: Colors.grey[300],
+                                              color: subTextColor,
                                             ),
-                                            decoration: InputDecoration(
-                                              hintText: "Tap to add producers name",
-                                              hintStyle: TextStyle(
-                                                fontFamily: "SegoeUI",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                                color: subTextColor,
-                                              ),
-                                              enabledBorder: InputBorder.none,
-                                              focusedBorder: InputBorder.none,
-                                            ),
-                                            textAlign: TextAlign.left,
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
                                           ),
+                                          textAlign: TextAlign.left,
                                         ),
-                                      ],
-                                    ),
-                                  ), // producers
-                                  Container(
-                                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          "Union",
+                                      ),
+                                    ],
+                                  ),
+                                ), // producers
+                                Container(
+                                  padding: EdgeInsets.only(top: 8, bottom: 8),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        "Union",
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                          color: textColor,
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 4),
+                                        height: 32,
+                                        child: TextField(
+                                          controller: _unionTC,
                                           style: TextStyle(
-                                            fontFamily: "Inter",
-                                            fontSize: 18,
+                                            fontFamily: "SegoeUI",
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: textColor,
+                                            color: Colors.grey[300],
                                           ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.only(top: 4),
-                                          height: 32,
-                                          child: TextField(
-                                            controller: _unionTC,
-                                            style: TextStyle(
+                                          decoration: InputDecoration(
+                                            hintText: "Tap to choose yes or no",
+                                            hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400,
-                                              color: Colors.grey[300],
+                                              color: subTextColor,
                                             ),
-                                            decoration: InputDecoration(
-                                              hintText: "Tap to choose yes or no",
-                                              hintStyle: TextStyle(
-                                                fontFamily: "SegoeUI",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                                color: subTextColor,
-                                              ),
-                                              enabledBorder: InputBorder.none,
-                                              focusedBorder: InputBorder.none,
-                                            ),
-                                            textAlign: TextAlign.left,
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
                                           ),
+                                          textAlign: TextAlign.left,
                                         ),
-                                      ],
-                                    ),
-                                  ), // union
-                                  Container(
-                                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          "Location",
+                                      ),
+                                    ],
+                                  ),
+                                ), // union
+                                Container(
+                                  padding: EdgeInsets.only(top: 8, bottom: 8),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        "Location",
+                                        style: TextStyle(
+                                          fontFamily: "Inter",
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                          color: textColor,
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 4),
+                                        height: 32,
+                                        child: TextField(
+                                          controller: _locationTC,
                                           style: TextStyle(
-                                            fontFamily: "Inter",
-                                            fontSize: 18,
+                                            fontFamily: "SegoeUI",
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: textColor,
+                                            color: Colors.grey[300],
                                           ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.only(top: 4),
-                                          height: 32,
-                                          child: TextField(
-                                            controller: _locationTC,
-                                            style: TextStyle(
+                                          decoration: InputDecoration(
+                                            hintText: "Tap to add location name",
+                                            hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400,
-                                              color: Colors.grey[300],
+                                              color: subTextColor,
                                             ),
-                                            decoration: InputDecoration(
-                                              hintText: "Tap to add location name",
-                                              hintStyle: TextStyle(
-                                                fontFamily: "SegoeUI",
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                                color: subTextColor,
-                                              ),
-                                              enabledBorder: InputBorder.none,
-                                              focusedBorder: InputBorder.none,
-                                            ),
-                                            textAlign: TextAlign.left,
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
                                           ),
+                                          textAlign: TextAlign.left,
                                         ),
-                                      ],
-                                    ),
-                                  ), // budget dates
-                                ],
-                              ),
+                                      ),
+                                    ],
+                                  ),
+                                ), // budget dates
+                              ],
                             ),
                           ),
                           Column(
@@ -506,179 +506,11 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                     shrinkWrap: true,
                                     children: <Widget>[
                                       ListTile(
-                                        contentPadding: EdgeInsets.zero,
-                                        title: Container(
-                                          padding: const EdgeInsets.only(top: 24, bottom: 24, left: 32, right: 32),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Row(
-                                                    children: <Widget>[
-                                                      CircleAvatar(
-                                                        backgroundColor: Color(0xffDD410D),
-                                                        radius: 5,
-                                                      ),
-                                                      Padding(
-                                                        padding: EdgeInsets.only(left: 8),
-                                                        child: Text(
-                                                          "Above The Line",
-                                                          style: TextStyle(
-                                                            fontFamily: 'Inter',
-                                                            fontWeight: FontWeight.w400,
-                                                            fontSize: 16,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(top: 4, left: 18),
-                                                    child: Text(
-                                                      "\$ 15,000",
-                                                      style: TextStyle(
-                                                        fontFamily: 'Inter',
-                                                        fontWeight: FontWeight.w400,
-                                                        fontSize: 30,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Icon(
-                                                    Icons.person,
-                                                    size: 25,
-                                                    color: Colors.white,
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(left: 4, right: 8),
-                                                    child: Text(
-                                                      "10",
-                                                      style: TextStyle(
-                                                        fontFamily: 'Inter',
-                                                        fontWeight: FontWeight.w400,
-                                                        fontSize: 24,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          Navigator.of(context).push(toAboveTheLine());
-                                        },
-                                      ), // above the line
-                                      ListTile(
-                                        minVerticalPadding: 0,
-                                        contentPadding: EdgeInsets.zero,
-                                        title: Container(
-                                          padding: const EdgeInsets.only(left: 32, right: 32),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                border: Border(
-                                                    top: BorderSide(color: borderColor, width: 1)
-                                                )
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(top: 24, bottom: 24),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Row(
-                                                        children: <Widget>[
-                                                          CircleAvatar(
-                                                            backgroundColor: Color(0xffDD410D),
-                                                            radius: 5,
-                                                          ),
-                                                          Padding(
-                                                            padding: EdgeInsets.only(left: 8),
-                                                            child: Text(
-                                                              "Production",
-                                                              style: TextStyle(
-                                                                fontFamily: 'Inter',
-                                                                fontWeight: FontWeight.w400,
-                                                                fontSize: 16,
-                                                                color: Colors.white,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                      Padding(
-                                                        padding: EdgeInsets.only(top: 4, left: 18),
-                                                        child: Text(
-                                                          "\$ 60,000",
-                                                          style: TextStyle(
-                                                            fontFamily: 'Inter',
-                                                            fontWeight: FontWeight.w400,
-                                                            fontSize: 30,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                    children: <Widget>[
-                                                      Icon(
-                                                        Icons.person,
-                                                        size: 25,
-                                                        color: Colors.white,
-                                                      ),
-                                                      Padding(
-                                                        padding: EdgeInsets.only(left: 4, right: 8),
-                                                        child: Text(
-                                                          "20",
-                                                          style: TextStyle(
-                                                            fontFamily: 'Inter',
-                                                            fontWeight: FontWeight.w400,
-                                                            fontSize: 24,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          Navigator.of(context).push(toProductionExpenses());
-                                        },
-                                      ), // post production
-                                      ListTile(
                                         minVerticalPadding: 0,
                                         contentPadding: EdgeInsets.zero,
                                         title: Padding(
-                                          padding: const EdgeInsets.only(left: 32, right: 32),
+                                          padding: const EdgeInsets.only(top: 4, left: 32, right: 32),
                                           child: Container(
-                                            decoration: BoxDecoration(
-                                                border: Border(
-                                                    top: BorderSide(color: borderColor, width: 1)
-                                                )
-                                            ),
                                             child: Padding(
                                               padding: const EdgeInsets.only(top: 24, bottom: 24),
                                               child: Row(
@@ -697,7 +529,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                                           Padding(
                                                             padding: EdgeInsets.only(left: 8),
                                                             child: Text(
-                                                              "Post Production",
+                                                              "Above The Line",
                                                               style: TextStyle(
                                                                 fontFamily: 'Inter',
                                                                 fontWeight: FontWeight.w400,
@@ -752,96 +584,27 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                           ),
                                         ),
                                         onTap: () {
-
+                                          Navigator.of(context).push(toAboveTheLine());
                                         },
-                                      ), // post production
-                                      ListTile(
-                                        minVerticalPadding: 0,
-                                        contentPadding: EdgeInsets.zero,
-                                        title: Padding(
-                                          padding: const EdgeInsets.only(left: 32, right: 32),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                border: Border(
-                                                    top: BorderSide(color: borderColor, width: 1)
-                                                )
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(top: 24, bottom: 24),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Row(
-                                                        children: <Widget>[
-                                                          CircleAvatar(
-                                                            backgroundColor: Color(0xffDD410D),
-                                                            radius: 5,
-                                                          ),
-                                                          Padding(
-                                                            padding: EdgeInsets.only(left: 8),
-                                                            child: Text(
-                                                              "Other Expenses",
-                                                              style: TextStyle(
-                                                                fontFamily: 'Inter',
-                                                                fontWeight: FontWeight.w400,
-                                                                fontSize: 16,
-                                                                color: Colors.white,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                      Padding(
-                                                        padding: EdgeInsets.only(top: 4, left: 18),
-                                                        child: Text(
-                                                          "\$ 12,000",
-                                                          style: TextStyle(
-                                                            fontFamily: 'Inter',
-                                                            fontWeight: FontWeight.w400,
-                                                            fontSize: 30,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                    children: <Widget>[
-                                                      Icon(
-                                                        Icons.person,
-                                                        size: 25,
-                                                        color: Colors.white,
-                                                      ),
-                                                      Padding(
-                                                        padding: EdgeInsets.only(left: 4, right: 8),
-                                                        child: Text(
-                                                          "8",
-                                                          style: TextStyle(
-                                                            fontFamily: 'Inter',
-                                                            fontWeight: FontWeight.w400,
-                                                            fontSize: 24,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        onTap: () {
-
-                                        },
-                                      ), // other expenses
+                                      ), // total
+                                      BudgetListTile(
+                                        title: "Production",
+                                        value: "\$60,000",
+                                        count: "20",
+                                        destination: toProductionExpenses(),
+                                      ), //production
+                                      BudgetListTile(
+                                        title: "Post Production",
+                                        value: "\$15,000",
+                                        count: "10",
+                                        destination: toPostProductionExpenses(),
+                                      ), //post production
+                                      BudgetListTile(
+                                        title: "Other Expenses",
+                                        value: "\$12,000",
+                                        count: "8",
+                                        destination: toOtherExpenses(),
+                                      ), //other expenses
                                       ListTile(
                                         minVerticalPadding: 0,
                                         contentPadding: EdgeInsets.zero,
@@ -928,7 +691,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                         onTap: () {
 
                                         },
-                                      ), // other e
+                                      ), // total
                                     ],
                                   ),
                               ),
@@ -1021,6 +784,42 @@ Route toAboveTheLine() {
 Route toProductionExpenses() {
   return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => ProductionExpenses(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(1, 0);
+        var end = Offset.zero;
+        var curve = Curves.easeInOut;
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
+
+        return SlideTransition(
+          position: tween.animate(animation),
+          child: child,
+        );
+      }
+  );
+}
+
+Route toOtherExpenses() {
+  return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => OtherExpenses(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(1, 0);
+        var end = Offset.zero;
+        var curve = Curves.easeInOut;
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
+
+        return SlideTransition(
+          position: tween.animate(animation),
+          child: child,
+        );
+      }
+  );
+}
+
+Route toPostProductionExpenses() {
+  return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => PostProductionExpenses(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(1, 0);
         var end = Offset.zero;

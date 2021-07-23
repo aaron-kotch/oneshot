@@ -78,7 +78,7 @@ class _AboveTheLineState extends State<AboveTheLine> {
                 ),
               ), // top
               Container(
-                padding: const EdgeInsets.only(top: 58),
+                padding: const EdgeInsets.only(top: 32),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
