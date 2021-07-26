@@ -8,96 +8,40 @@ class Test extends StatefulWidget {
 }
 
 class _TestState extends State<Test> {
+
+  bool expanded = false;
   @override
   Widget build(BuildContext context) {
 
-    List<Widget> indicatorWidget = [
-      Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Hero(
-              tag: "index",
-              child: CircleAvatar(
-                radius: 5,
-                backgroundColor: Colors.white,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: CircleAvatar(
-              radius: 5,
-              backgroundColor: Colors.grey[400],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: CircleAvatar(
-              radius: 5,
-              backgroundColor: Colors.grey[400],
-            ),
-          ),
-        ],
-      ),
-      Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: CircleAvatar(
-              radius: 5,
-              backgroundColor: Colors.grey[400],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Hero(
-              tag: "index",
-              child: CircleAvatar(
-                radius: 5,
-                backgroundColor: Colors.white,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: CircleAvatar(
-              radius: 5,
-              backgroundColor: Colors.grey[400],
-            ),
-          ),
-        ],
-      ),
-      Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: CircleAvatar(
-              radius: 5,
-              backgroundColor: Colors.grey[400],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: CircleAvatar(
-              radius: 5,
-              backgroundColor: Colors.grey[400],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Hero(
-              tag: "index",
-              child: CircleAvatar(
-                radius: 5,
-                backgroundColor: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ];
+    var width = MediaQuery.of(context).size.width;
 
-    return Container();
+    return SafeArea(
+        child: Scaffold(
+          body: Column(
+            children: [
+              ExpansionPanelList(
+                expansionCallback: (index, state) {
+                  setState(() {
+                    expanded = !state;
+                  });
+                },
+                children: [
+                  ExpansionPanel(
+                    isExpanded: expanded,
+                      headerBuilder: (context, isOpen) {
+                        return Container(
+                          color: Colors.red[200],
+                        );
+                      },
+                      body: Container(
+                        color: Colors.yellow[200],
+                        height: 300,
+                      ))
+                ],
+              ),
+            ],
+          ),
+        )
+    );
   }
 }

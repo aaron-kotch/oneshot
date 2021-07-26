@@ -289,7 +289,7 @@ class _SettingsState extends State<Settings> {
                         child: Padding(
                           padding: EdgeInsets.only(left: 24),
                           child: Text(
-                            'Face ID',
+                            'Dark Mode',
                             style: TextStyle(
                               fontFamily: 'CenturyGothic',
                               fontSize: 18,

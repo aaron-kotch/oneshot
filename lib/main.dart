@@ -1,10 +1,18 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oneshot/classes/Projects.dart';
+import 'package:oneshot/customWidgets/CustomExpansionTile.dart';
 import 'package:oneshot/drawer.dart';
 import 'package:oneshot/newProject.dart';
 import 'package:oneshot/settings.dart';
+import 'package:oneshot/templateMenu.dart';
+import 'package:oneshot/test.dart';
+
+import 'CustomExpansionPanel.dart';
+import 'deleted.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,6 +41,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
 
   static List<Projects> projectList = [];
+  static final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -44,10 +53,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Color orangeAccent = Color(0xffD5754A);
   Color baseColor = Color(0xff1E1E1E);
 
+  bool expanded = false;
+
   @override
   Widget build(BuildContext context) {
-
-    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         systemNavigationBarColor: Color(0xff1E1E1E),
@@ -61,9 +70,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return SafeArea(
         child: new GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusManager.instance.primaryFocus!.unfocus();
+          },
           child: Scaffold(
-            key: _scaffoldKey,
+            key: MyHomePage.scaffoldKey,
             backgroundColor: Color(0xff1E1E1E),
             body: SingleChildScrollView(
               child: Container(
@@ -71,29 +82,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 16, right: 16),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(
-                              Icons.menu,
-                              size: 25,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              _scaffoldKey.currentState!.openDrawer();
-                            },
-                          ),
-                          Container(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
+                    CustomExpansionPanelList(
+                      expandedHeaderPadding: EdgeInsets.all(0),
+                      animationDuration: Duration(milliseconds: 300),
+                      expansionCallback: (index, isExpanded) {
+                        setState(() {
+                          expanded = !isExpanded;
+                        });
+                      },
+                      children: [
+                        CustomExpansionPanel(
+                            headerBuilder: (context, state) {
+                              return Container(
+                                child: Text(
                                   'Budget Sheet',
                                   style: TextStyle(
                                     fontFamily: 'Calibri',
@@ -102,279 +105,262 @@ class _MyHomePageState extends State<MyHomePage> {
                                     color: Colors.white,
                                   ),
                                 ),
-                                IconButton(
-                                  iconSize: 20,
-                                  icon: Icon(
-                                    Icons.keyboard_arrow_down_rounded,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context, builder: (context) {
-                                        return Dialog(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(20)
-                                          ),
-                                          backgroundColor: baseColor,
+                              );
+                            },
+                            body: Container(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                          flex: 1,
                                           child: Container(
-                                            padding: EdgeInsets.symmetric(vertical: 20),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                                  child: Text(
-                                                    "Template Menu",
-                                                    style: TextStyle(
-                                                      fontFamily: 'Calibri',
-                                                      fontWeight: FontWeight.w700,
-                                                      fontSize: 18,
+                                              width: width / 3,
+                                              child: Column(
+                                                children: [
+                                                  ClipOval(
+                                                      child: Container(
+                                                        color: orangeAccent,
+                                                        child: IconButton(
+                                                          disabledColor: orangeAccent,
+                                                          icon: ImageIcon(
+                                                            AssetImage("assets/icons/telegram.png"),
+                                                            color: Colors.white,
+                                                          ),
+                                                          onPressed: () {
+                                                          },
+                                                        ),
+                                                      )
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 8),
+                                                    child: Text(
+                                                      "Call Sheet",
+                                                      style: TextStyle(
+                                                        fontFamily: 'Calibri',
+                                                        fontWeight: FontWeight.w300,
+                                                        fontSize: 13,
+                                                        color: orangeAccent,
+                                                      ),
+                                                      maxLines: 2,
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                          ),
+                                        ),
+                                        Flexible(
+                                          flex: 1,
+                                          child: Container(
+                                              width: width / 3,
+                                              child: Column(
+                                                children: [
+                                                  ClipOval(
+                                                    child: Container(
                                                       color: orangeAccent,
+                                                      child: IconButton(
+                                                        icon: ImageIcon(
+                                                          AssetImage("assets/icons/clapperboard.png"),
+                                                          color: Colors.white,
+                                                        ),
+                                                        onPressed: () {
+
+                                                        },
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets.all(16.0),
-                                                      child: Column(
-                                                        children: [
-                                                          Ink(
-                                                            decoration: ShapeDecoration(
-                                                              color: orangeAccent,
-                                                              shape: CircleBorder(),
-                                                            ),
-                                                            child: IconButton(
-                                                              icon: ImageIcon(
-                                                                AssetImage("assets/icons/telegram.png"),
-                                                                color: Colors.white,
-                                                              ),
-                                                              onPressed: () {
-
-                                                              },
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding: const EdgeInsets.only(top: 8),
-                                                            child: Text(
-                                                              "Call Sheet",
-                                                              style: TextStyle(
-                                                                fontFamily: 'Calibri',
-                                                                fontWeight: FontWeight.w300,
-                                                                fontSize: 13,
-                                                                color: orangeAccent,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      )
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 8),
+                                                    child: Text(
+                                                      "Shot List",
+                                                      style: TextStyle(
+                                                        fontFamily: 'Calibri',
+                                                        fontWeight: FontWeight.w300,
+                                                        fontSize: 13,
+                                                        color: orangeAccent,
+                                                      ),
+                                                      maxLines: 2,
                                                     ),
-                                                    Padding(
-                                                        padding: const EdgeInsets.all(16.0),
-                                                        child: Column(
-                                                          children: [
-                                                            Ink(
-                                                              decoration: ShapeDecoration(
-                                                                color: orangeAccent,
-                                                                shape: CircleBorder(),
-                                                              ),
-                                                              child: IconButton(
-                                                                icon: ImageIcon(
-                                                                  AssetImage("assets/icons/clapperboard.png"),
-                                                                  color: Colors.white,
-                                                                ),
-                                                                onPressed: () {
-
-                                                                },
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(top: 8),
-                                                              child: Text(
-                                                                "Shot List",
-                                                                style: TextStyle(
-                                                                  fontFamily: 'Calibri',
-                                                                  fontWeight: FontWeight.w300,
-                                                                  fontSize: 13,
-                                                                  color: orangeAccent,
-                                                                ),
-                                                              ),
-                                                            )
-                                                          ],
-                                                        )
-                                                    ),
-                                                    Padding(
-                                                        padding: const EdgeInsets.all(16.0),
-                                                        child: Column(
-                                                          children: [
-                                                            Ink(
-                                                              decoration: ShapeDecoration(
-                                                                color: orangeAccent,
-                                                                shape: CircleBorder(),
-                                                              ),
-                                                              child: IconButton(
-                                                                icon: ImageIcon(
-                                                                  AssetImage("assets/icons/spreadsheet.png"),
-                                                                  color: Colors.white,
-                                                                ),
-                                                                onPressed: () {
-
-                                                                },
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(top: 8),
-                                                              child: Text(
-                                                                "Budget Sheet",
-                                                                style: TextStyle(
-                                                                  fontFamily: 'Calibri',
-                                                                  fontWeight: FontWeight.w300,
-                                                                  fontSize: 13,
-                                                                  color: orangeAccent,
-                                                                ),
-                                                              ),
-                                                            )
-                                                          ],
-                                                        )
-                                                    ),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets.all(16.0),
-                                                      child: Column(
-                                                        children: [
-                                                          Ink(
-                                                            decoration: ShapeDecoration(
-                                                              color: orangeAccent,
-                                                              shape: CircleBorder(),
-                                                            ),
-                                                            child: IconButton(
-                                                              icon: ImageIcon(
-                                                                AssetImage("assets/icons/compose.png"),
-                                                                color: Colors.white,
-                                                              ),
-                                                              onPressed: () {
-
-                                                              },
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding: const EdgeInsets.only(top: 8),
-                                                            child: Text(
-                                                              "One Liner",
-                                                              style: TextStyle(
-                                                                fontFamily: 'Calibri',
-                                                                fontWeight: FontWeight.w300,
-                                                                fontSize: 13,
-                                                                color: orangeAccent,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      )
-                                                    ),
-                                                    Padding(
-                                                        padding: const EdgeInsets.all(16.0),
-                                                        child: Column(
-                                                          children: [
-                                                            Ink(
-                                                              decoration: ShapeDecoration(
-                                                                color: orangeAccent,
-                                                                shape: CircleBorder(),
-                                                              ),
-                                                              child: IconButton(
-                                                                icon: ImageIcon(
-                                                                  AssetImage("assets/icons/folder.png"),
-                                                                  color: Colors.white,
-                                                                ),
-                                                                onPressed: () {
-
-                                                                },
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(top: 8),
-                                                              child: Text(
-                                                                "Storyboard",
-                                                                style: TextStyle(
-                                                                  fontFamily: 'Calibri',
-                                                                  fontWeight: FontWeight.w300,
-                                                                  fontSize: 13,
-                                                                  color: orangeAccent,
-                                                                ),
-                                                              ),
-                                                            )
-                                                          ],
-                                                        )
-                                                    ),
-                                                    Padding(
-                                                        padding: const EdgeInsets.all(16.0),
-                                                        child: Column(
-                                                          children: [
-                                                            Ink(
-                                                              decoration: ShapeDecoration(
-                                                                color: orangeAccent,
-                                                                shape: CircleBorder(),
-                                                              ),
-                                                              child: IconButton(
-                                                                icon: ImageIcon(
-                                                                  AssetImage("assets/icons/flipboard.png"),
-                                                                  color: Colors.white,
-                                                                ),
-                                                                onPressed: () {
-
-                                                                },
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(top: 8),
-                                                              child: Text(
-                                                                "Concept Board",
-                                                                style: TextStyle(
-                                                                  fontFamily: 'Calibri',
-                                                                  fontWeight: FontWeight.w300,
-                                                                  fontSize: 13,
-                                                                  color: orangeAccent,
-                                                                ),
-                                                              ),
-                                                            )
-                                                          ],
-                                                        )
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
+                                                  )
+                                                ],
+                                              )
                                           ),
-                                        );
-                                    });
-                                  },
-                                ),
-                              ],
-                            )
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.settings,
-                              size: 25,
-                              color: Colors.white,
+                                        ),
+                                        Flexible(
+                                          flex: 1,
+                                          child: Container(
+                                              width: width / 3,
+                                              child: Column(
+                                                children: [
+                                                  Ink(
+                                                    decoration: ShapeDecoration(
+                                                      color: orangeAccent,
+                                                      shape: CircleBorder(),
+                                                    ),
+                                                    child: IconButton(
+                                                      icon: ImageIcon(
+                                                        AssetImage("assets/icons/spreadsheet.png"),
+                                                        color: Colors.white,
+                                                      ),
+                                                      onPressed: () {
+
+                                                      },
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 8),
+                                                    child: Text(
+                                                      "Budget Sheet",
+                                                      style: TextStyle(
+                                                        fontFamily: 'Calibri',
+                                                        fontWeight: FontWeight.w300,
+                                                        fontSize: 13,
+                                                        color: orangeAccent,
+                                                      ),
+                                                      maxLines: 2,
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                          flex: 1,
+                                          child: Container(
+                                              width: width / 3,
+                                              child: Column(
+                                                children: [
+                                                  Ink(
+                                                    decoration: ShapeDecoration(
+                                                      color: orangeAccent,
+                                                      shape: CircleBorder(),
+                                                    ),
+                                                    child: IconButton(
+                                                      icon: ImageIcon(
+                                                        AssetImage("assets/icons/compose.png"),
+                                                        color: Colors.white,
+                                                      ),
+                                                      onPressed: () {
+
+                                                      },
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 8),
+                                                    child: Text(
+                                                      "One Liner",
+                                                      style: TextStyle(
+                                                        fontFamily: 'Calibri',
+                                                        fontWeight: FontWeight.w300,
+                                                        fontSize: 13,
+                                                        color: orangeAccent,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                          ),
+                                        ),
+                                        Flexible(
+                                          flex: 1,
+                                          child: Container(
+                                              width: width / 3,
+                                              child: Column(
+                                                children: [
+                                                  Ink(
+                                                    decoration: ShapeDecoration(
+                                                      color: orangeAccent,
+                                                      shape: CircleBorder(),
+                                                    ),
+                                                    child: IconButton(
+                                                      icon: ImageIcon(
+                                                        AssetImage("assets/icons/folder.png"),
+                                                        color: Colors.white,
+                                                      ),
+                                                      onPressed: () {
+
+                                                      },
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 8),
+                                                    child: Text(
+                                                      "Storyboard",
+                                                      style: TextStyle(
+                                                        fontFamily: 'Calibri',
+                                                        fontWeight: FontWeight.w300,
+                                                        fontSize: 13,
+                                                        color: orangeAccent,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                          ),
+                                        ),
+                                        Flexible(
+                                          flex: 1,
+                                          child: Container(
+                                              width: width / 3,
+                                              child: Column(
+                                                children: [
+                                                  Ink(
+                                                    decoration: ShapeDecoration(
+                                                      color: orangeAccent,
+                                                      shape: CircleBorder(),
+                                                    ),
+                                                    child: IconButton(
+                                                      icon: ImageIcon(
+                                                        AssetImage("assets/icons/flipboard.png"),
+                                                        color: Colors.white,
+                                                      ),
+                                                      onPressed: () {
+
+                                                      },
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 8),
+                                                    child: Text(
+                                                      "Concept Board",
+                                                      style: TextStyle(
+                                                        fontFamily: 'Calibri',
+                                                        fontWeight: FontWeight.w300,
+                                                        fontSize: 13,
+                                                        color: orangeAccent,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            onPressed: () {
-                              Navigator.of(context).push(toSettings());
-                            },
-                          )
-                        ],
-                      ),
+                            isExpanded: expanded,
+                            canTapOnHeader: false,
+                            backgroundColor: Color(0xff1E1E1E)
+                        ),
+                      ],
                     ),
                     Container(
                       width: width,
-                      height: 100,
-                      padding: EdgeInsets.only(top: 28, left: 16, right: 16),
+                      padding: EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
                       child: TextField(
                         textAlignVertical: TextAlignVertical.center,
                         style: TextStyle(
@@ -400,6 +386,63 @@ class _MyHomePageState extends State<MyHomePage> {
                             )
                         ),
                       ),
+                    ),
+                    ListTile(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              CircleAvatar(
+                                backgroundColor: Colors.red[700],
+                                radius: 6,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 16),
+                                child: Text(
+                                  "Project 1",
+                                  style: TextStyle(
+                                      fontFamily: 'CenturyGothic',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.event_rounded,
+                                  size: 12,
+                                  color: Colors.grey[400],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 16),
+                                  child: Text(
+                                    "01/01/2021",
+                                    style: TextStyle(
+                                        fontFamily: 'CenturyGothic',
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      onTap: () {},
                     ),
                     Container(
                       padding: EdgeInsets.only(top: 16),
@@ -465,7 +508,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             );
                           }),
-                    )
+                    ),
                   ],
                 ),
               ),
