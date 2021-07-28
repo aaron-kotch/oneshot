@@ -1,60 +1,72 @@
 import 'package:flutter/material.dart';
 
-class ProductionTile extends StatefulWidget {
-  var title;
-  ProductionTile({Key? key, this.title}) : super(key: key);
+class SubBudgetTile extends StatefulWidget {
+
+  SubBudgetTile({Key? key, required this.title, required this.payee, required this.amount}) : super(key: key);
+
+  final String title;
+  final String payee;
+  final String amount;
 
   @override
-  _ProductionTileState createState() => _ProductionTileState();
+  _SubBudgetTileState createState() => _SubBudgetTileState();
 }
 
-class _ProductionTileState extends State<ProductionTile> {
+class _SubBudgetTileState extends State<SubBudgetTile> {
   @override
   Widget build(BuildContext context) {
 
     Color textColor = Color(0xffD2480A);
     Color subTextColor = Color(0xff999999);
 
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
+      width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            children: [
-              Text(
-                widget.title,
-                style: TextStyle(
-                  fontFamily: "Inter",
-                  fontWeight: FontWeight.w400,
-                  fontSize: 18,
-                  color: textColor,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(
+                  widget.title,
+                  style: TextStyle(
+                    fontFamily: "Inter",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 18,
+                    color: textColor,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 8),
-                child: Icon(
-                  Icons.info_outline,
-                  size: 12,
-                  color: Colors.white,
+                Container(
+                  padding: const EdgeInsets.only(left: 12, right: 8),
+                  child: Icon(
+                    Icons.info_outline,
+                    size: 12,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              Text(
-                "100-1",
-                style: TextStyle(
-                  fontFamily: "SegoeUI",
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  color: subTextColor,
-                ),
-              )
-            ],
+                Text(
+                  "100-1",
+                  style: TextStyle(
+                    fontFamily: "SegoeUI",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    color: subTextColor,
+                  ),
+                )
+              ],
+            ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 12),
+            padding: const EdgeInsets.symmetric(vertical: 4),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Icon(
@@ -65,7 +77,7 @@ class _ProductionTileState extends State<ProductionTile> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    "Total Payee",
+                    widget.payee,
                     style: TextStyle(
                       fontFamily: "SegoeUI",
                       fontWeight: FontWeight.w400,
@@ -78,7 +90,7 @@ class _ProductionTileState extends State<ProductionTile> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.symmetric(vertical: 4),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -92,7 +104,7 @@ class _ProductionTileState extends State<ProductionTile> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    "Total Amount",
+                    widget.amount,
                     style: TextStyle(
                       fontFamily: "SegoeUI",
                       fontWeight: FontWeight.w400,

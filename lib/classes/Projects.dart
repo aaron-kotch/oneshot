@@ -12,6 +12,4 @@ class Projects {
 
   Projects(this.company, this.title, this.prepareBy, this.budgetDate, this.shootDays, this.producers, this.union, this.location);
 
-
-
 }

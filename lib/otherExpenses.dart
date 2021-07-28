@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oneshot/productionExpensesTile.dart';
+import 'package:oneshot/newSubBudgetTile.dart';
 import 'package:oneshot/projectBottomSheet.dart';
 
 class OtherExpenses extends StatefulWidget {
@@ -80,10 +80,10 @@ class _OtherExpensesState extends State<OtherExpenses> {
                 padding: EdgeInsets.only(top: 32),
                 child: Column(
                   children: <Widget>[
-                    ProductionTile(title: "Publicity"),
-                    ProductionTile(title: "Legal & Accounting"),
-                    ProductionTile(title: "General Expenses"),
-                    ProductionTile(title: "Insurance"),
+                    NewSubBudgetTile(title: "Publicity", payeeController: new TextEditingController(), amountController: new TextEditingController()),
+                    // SubBudgetTile(title: "Legal & Accounting"),
+                    // SubBudgetTile(title: "General Expenses"),
+                    // SubBudgetTile(title: "Insurance"),
                   ]
                 ),
               ),

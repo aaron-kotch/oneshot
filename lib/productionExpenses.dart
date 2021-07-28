@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:oneshot/productionExpensesTile.dart';
+import 'package:oneshot/newSubBudgetTile.dart';
 import 'package:oneshot/projectBottomSheet.dart';
 
 class ProductionExpenses extends StatefulWidget {
@@ -189,13 +189,13 @@ class _ProductionExpensesState extends State<ProductionExpenses> {
                           child: ListView(
                             shrinkWrap: true,
                             children: <Widget>[
-                              ProductionTile(title: "Production Staff"),
-                              ProductionTile(title: "Extra Talent"),
-                              ProductionTile(title: "Set Construction"),
-                              ProductionTile(title: "Set Design"),
-                              ProductionTile(title: "Set Pre-Rig & Strike"),
-                              ProductionTile(title: "Set Operations"),
-                              ProductionTile(title: "Set Dressing"),
+                              NewSubBudgetTile(title: "Production Staff", payeeController: new TextEditingController(), amountController: new TextEditingController()),
+                              // SubBudgetTile(title: "Extra Talent"),
+                              // SubBudgetTile(title: "Set Construction"),
+                              // SubBudgetTile(title: "Set Design"),
+                              // SubBudgetTile(title: "Set Pre-Rig & Strike"),
+                              // SubBudgetTile(title: "Set Operations"),
+                              // SubBudgetTile(title: "Set Dressing"),
                             ],
                           ),
                         ),
@@ -203,13 +203,13 @@ class _ProductionExpensesState extends State<ProductionExpenses> {
                           child: ListView(
                             shrinkWrap: true,
                             children: <Widget>[
-                              ProductionTile(title: "Property"),
-                              ProductionTile(title: "Wardrobe"),
-                              ProductionTile(title: "Electric"),
-                              ProductionTile(title: "Camera"),
-                              ProductionTile(title: "Production Sound"),
-                              ProductionTile(title: "Make-up & Hair"),
-                              ProductionTile(title: "Transportation"),
+                              NewSubBudgetTile(title: "Property", payeeController: new TextEditingController(), amountController: new TextEditingController()),
+                              // SubBudgetTile(title: "Wardrobe"),
+                              // SubBudgetTile(title: "Electric"),
+                              // SubBudgetTile(title: "Camera"),
+                              // SubBudgetTile(title: "Production Sound"),
+                              // SubBudgetTile(title: "Make-up & Hair"),
+                              // SubBudgetTile(title: "Transportation"),
                             ],
                           ),
                         ),
@@ -217,12 +217,12 @@ class _ProductionExpensesState extends State<ProductionExpenses> {
                           child: ListView(
                             shrinkWrap: true,
                             children: <Widget>[
-                              ProductionTile(title: "Locations"),
-                              ProductionTile(title: "Picture Vehicles & Animals"),
-                              ProductionTile(title: "Special Effects"),
-                              ProductionTile(title: "Visual Effects - Post"),
-                              ProductionTile(title: "Film & Lab"),
-                              ProductionTile(title: "BTL Travel"),
+                              NewSubBudgetTile(title: "Locations", payeeController: new TextEditingController(), amountController: new TextEditingController()),
+                              // SubBudgetTile(title: "Picture Vehicles & Animals"),
+                              // SubBudgetTile(title: "Special Effects"),
+                              // SubBudgetTile(title: "Visual Effects - Post"),
+                              // SubBudgetTile(title: "Film & Lab"),
+                              // SubBudgetTile(title: "BTL Travel"),
                             ],
                           ),
                         ),

@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oneshot/classes/AboveTheLineObject.dart';
+import 'package:oneshot/pageRoutes.dart';
 import 'package:oneshot/projectBottomSheet.dart';
+import 'package:oneshot/subBudgetTile.dart';
 
 class AboveTheLine extends StatefulWidget {
+
   const AboveTheLine({Key? key}) : super(key: key);
+
+  static List<AboveTheLineObject> itemList = [];
 
   @override
   _AboveTheLineState createState() => _AboveTheLineState();
@@ -24,15 +30,20 @@ class _AboveTheLineState extends State<AboveTheLine> {
         systemNavigationBarIconBrightness: Brightness.light
     ));
 
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xff1E1E1E),
         body: Container(
+          width: width,
+          height: height,
           child: Column(
             children: <Widget>[
               Container(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 28, left: 16, right: 16),
+                  padding: EdgeInsets.only(top: 28, left: 16, right: 16, bottom: 16),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,13 +59,16 @@ class _AboveTheLineState extends State<AboveTheLine> {
                         },
                       ),
                       Container(
-                        child: Text(
-                          'Above The Line',
-                          style: TextStyle(
-                            fontFamily: 'Calibri',
-                            fontWeight: FontWeight.w300,
-                            fontSize: 24,
-                            color: Colors.white,
+                        child: Hero(
+                          tag: 'BudgetTitle',
+                          child: Text(
+                            'Above The Line',
+                            style: TextStyle(
+                              fontFamily: 'Calibri',
+                              fontWeight: FontWeight.w300,
+                              fontSize: 24,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -77,477 +91,18 @@ class _AboveTheLineState extends State<AboveTheLine> {
                   ),
                 ),
               ), // top
-              Container(
-                padding: const EdgeInsets.only(top: 32),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              Text(
-                                "Development Rights",
-                                style: TextStyle(
-                                  fontFamily: "Inter",
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 18,
-                                  color: textColor,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16, right: 8),
-                                child: Icon(
-                                  Icons.info_outline,
-                                  size: 12,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Text(
-                                "100-1",
-                                style: TextStyle(
-                                  fontFamily: "SegoeUI",
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                  color: subTextColor,
-                                ),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.person,
-                                  size: 15,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Text(
-                                    "Total Payee",
-                                    style: TextStyle(
-                                      fontFamily: "SegoeUI",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                      color: subTextColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                ImageIcon(
-                                  AssetImage("assets/icons/dollar.png"),
-                                  size: 15,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Text(
-                                    "Total Amount",
-                                    style: TextStyle(
-                                      fontFamily: "SegoeUI",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                      color: subTextColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ), //development rights
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              Text(
-                                "Story & Rights",
-                                style: TextStyle(
-                                  fontFamily: "Inter",
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 18,
-                                  color: textColor,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16, right: 8),
-                                child: Icon(
-                                  Icons.info_outline,
-                                  size: 12,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Text(
-                                "100-1",
-                                style: TextStyle(
-                                  fontFamily: "SegoeUI",
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                  color: subTextColor,
-                                ),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.person,
-                                  size: 15,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Text(
-                                    "Total Payee",
-                                    style: TextStyle(
-                                      fontFamily: "SegoeUI",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                      color: subTextColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                ImageIcon(
-                                  AssetImage("assets/icons/dollar.png"),
-                                  size: 15,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Text(
-                                    "Total Amount",
-                                    style: TextStyle(
-                                      fontFamily: "SegoeUI",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                      color: subTextColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ), //story & rights
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              Text(
-                                "Director & Staff",
-                                style: TextStyle(
-                                  fontFamily: "Inter",
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 18,
-                                  color: textColor,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16, right: 8),
-                                child: Icon(
-                                  Icons.info_outline,
-                                  size: 12,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Text(
-                                "100-1",
-                                style: TextStyle(
-                                  fontFamily: "SegoeUI",
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                  color: subTextColor,
-                                ),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.person,
-                                  size: 15,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Text(
-                                    "Total Payee",
-                                    style: TextStyle(
-                                      fontFamily: "SegoeUI",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                      color: subTextColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                ImageIcon(
-                                  AssetImage("assets/icons/dollar.png"),
-                                  size: 15,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Text(
-                                    "Total Amount",
-                                    style: TextStyle(
-                                      fontFamily: "SegoeUI",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                      color: subTextColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ), //director & staff
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              Text(
-                                "Cast",
-                                style: TextStyle(
-                                  fontFamily: "Inter",
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 18,
-                                  color: textColor,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16, right: 8),
-                                child: Icon(
-                                  Icons.info_outline,
-                                  size: 12,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Text(
-                                "100-1",
-                                style: TextStyle(
-                                  fontFamily: "SegoeUI",
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                  color: subTextColor,
-                                ),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.person,
-                                  size: 15,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Text(
-                                    "Total Payee",
-                                    style: TextStyle(
-                                      fontFamily: "SegoeUI",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                      color: subTextColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                ImageIcon(
-                                  AssetImage("assets/icons/dollar.png"),
-                                  size: 15,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Text(
-                                    "Total Amount",
-                                    style: TextStyle(
-                                      fontFamily: "SegoeUI",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                      color: subTextColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ), //cast
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              Text(
-                                "Travel & Living",
-                                style: TextStyle(
-                                  fontFamily: "Inter",
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 18,
-                                  color: textColor,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16, right: 8),
-                                child: Icon(
-                                  Icons.info_outline,
-                                  size: 12,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Text(
-                                "100-1",
-                                style: TextStyle(
-                                  fontFamily: "SegoeUI",
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                  color: subTextColor,
-                                ),
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.person,
-                                  size: 15,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Text(
-                                    "Total Payee",
-                                    style: TextStyle(
-                                      fontFamily: "SegoeUI",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                      color: subTextColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                ImageIcon(
-                                  AssetImage("assets/icons/dollar.png"),
-                                  size: 15,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Text(
-                                    "Total Amount",
-                                    style: TextStyle(
-                                      fontFamily: "SegoeUI",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                      color: subTextColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ), //travel & living
-                  ],
+              Expanded(
+                child: ListView.builder(
+                  itemCount: AboveTheLine.itemList.length,
+                  itemBuilder: (context, index) {
+                    return SubBudgetTile(
+                      title: AboveTheLine.itemList[index].title,
+                      payee: AboveTheLine.itemList[index].totalPayee,
+                      amount: AboveTheLine.itemList[index].totalAmount,
+                    );
+                  },
                 ),
               ), // main listview
-              Spacer(),
               Container(
                 height: 72,
                 alignment: Alignment.center,
@@ -588,7 +143,7 @@ class _AboveTheLineState extends State<AboveTheLine> {
                     ),
                     IconButton(
                       onPressed: () {
-
+                        Navigator.of(context).push(toNewAboveTheLine());
                       },
                       icon: Icon(
                         Icons.add_circle,

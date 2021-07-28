@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:oneshot/main.dart';
+import 'package:oneshot/pageRoutes.dart';
 
 import 'CustomExpandIcon.dart';
 
@@ -293,9 +294,38 @@ class _CustomExpansionPanelListState extends State<CustomExpansionPanelList> {
           padding: const EdgeInsets.all(16.0),
           onPressed: !child.canTapOnHeader
               ? (bool isExpanded) => _handlePressed(isExpanded, index)
-              : null,
+              : null, isRotation: true, myIcon: Icon(Icons.expand_more, color: Colors.white), isSlide: false,
         ),
       );
+
+      Widget leadingIconContainer = Container(
+        margin: const EdgeInsetsDirectional.only(end: 0.0),
+        child: CustomExpandIcon(
+          isRotation: false,
+          myIcon: Icon(Icons.menu, color: Colors.white),
+          isSlide: true,
+          isExpanded: _isChildExpanded(index),
+          padding: const EdgeInsets.all(16.0),
+          onPressed: (val) {
+            MyHomePage.scaffoldKey.currentState!.openDrawer();
+          }
+        ),
+      );
+
+      Widget trailingIconContainer = Container(
+        margin: const EdgeInsetsDirectional.only(end: 0.0),
+        child: CustomExpandIcon(
+          isRotation: false,
+          myIcon: Icon(Icons.settings, color: Colors.white),
+          isSlide: true,
+          isExpanded: _isChildExpanded(index),
+          padding: const EdgeInsets.all(16.0),
+          onPressed: (val) {
+            Navigator.of(context).push(toSettings());
+          }
+        ),
+      );
+
       if (!child.canTapOnHeader) {
         final MaterialLocalizations localizations = MaterialLocalizations.of(context);
         expandIconContainer = Semantics(
@@ -319,16 +349,8 @@ class _CustomExpansionPanelListState extends State<CustomExpansionPanelList> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: IconButton(
-                        onPressed: () {
-                          MyHomePage.scaffoldKey.currentState!.openDrawer();
-                        },
-                        icon: Icon(
-                          Icons.menu,
-                          color: Colors.white,
-                        )
-                      ),
+                      padding: const EdgeInsets.only(left: 12),
+                      child: leadingIconContainer
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -344,14 +366,8 @@ class _CustomExpansionPanelListState extends State<CustomExpansionPanelList> {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.settings,
-                          color: Colors.white,
-                        )
-                      ),
+                      padding: const EdgeInsets.only(right: 12),
+                      child: trailingIconContainer
                     ),
                   ],
                 ),

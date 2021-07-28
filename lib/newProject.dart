@@ -1,10 +1,12 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oneshot/aboveTheLine.dart';
-import 'package:oneshot/budgetListTile.dart';
+import 'package:oneshot/budgetTypesTile.dart';
 import 'package:oneshot/classes/Projects.dart';
 import 'package:oneshot/main.dart';
+import 'package:oneshot/pageRoutes.dart';
 import 'package:oneshot/postProductionExpenses.dart';
 import 'package:oneshot/productionExpenses.dart';
 import 'package:oneshot/projectBottomSheet.dart';
@@ -52,6 +54,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
     Color textColor = Color(0xffD2480A);
     Color subTextColor = Color(0xff999999);
     Color borderColor = Color(0xff0E0E0E);
+    Color baseColor = Color(0xff1E1E1E);
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         systemNavigationBarColor: Color(0xff171717),
@@ -505,105 +508,43 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                   child: ListView(
                                     shrinkWrap: true,
                                     children: <Widget>[
-                                      ListTile(
-                                        minVerticalPadding: 0,
-                                        contentPadding: EdgeInsets.zero,
-                                        title: Padding(
-                                          padding: const EdgeInsets.only(top: 4, left: 32, right: 32),
-                                          child: Container(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(top: 24, bottom: 24),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Row(
-                                                        children: <Widget>[
-                                                          CircleAvatar(
-                                                            backgroundColor: Color(0xffDD410D),
-                                                            radius: 5,
-                                                          ),
-                                                          Padding(
-                                                            padding: EdgeInsets.only(left: 8),
-                                                            child: Text(
-                                                              "Above The Line",
-                                                              style: TextStyle(
-                                                                fontFamily: 'Inter',
-                                                                fontWeight: FontWeight.w400,
-                                                                fontSize: 16,
-                                                                color: Colors.white,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                      Padding(
-                                                        padding: EdgeInsets.only(top: 4, left: 18),
-                                                        child: Text(
-                                                          "\$ 15,000",
-                                                          style: TextStyle(
-                                                            fontFamily: 'Inter',
-                                                            fontWeight: FontWeight.w400,
-                                                            fontSize: 30,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                    children: <Widget>[
-                                                      Icon(
-                                                        Icons.person,
-                                                        size: 25,
-                                                        color: Colors.white,
-                                                      ),
-                                                      Padding(
-                                                        padding: EdgeInsets.only(left: 4, right: 8),
-                                                        child: Text(
-                                                          "10",
-                                                          style: TextStyle(
-                                                            fontFamily: 'Inter',
-                                                            fontWeight: FontWeight.w400,
-                                                            fontSize: 24,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          Navigator.of(context).push(toAboveTheLine());
+                                      OpenContainer(
+                                        closedBuilder: (context, action) {
+                                          return BudgetTypesTile(
+                                            title: "Above The Line",
+                                            value: "\$15,000",
+                                            count: "10",
+                                          );
                                         },
-                                      ), // total
-                                      BudgetListTile(
+                                        openBuilder: (context, action) => AboveTheLine(),
+                                        closedElevation: 0,
+                                        openElevation: 0,
+                                        closedShape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.zero
+                                        ),
+                                        closedColor: baseColor,
+                                        openColor: baseColor,
+                                        transitionDuration: Duration(milliseconds: 300),
+                                        onClosed: (val) {
+                                          setState(() {
+
+                                          });
+                                        },
+                                      ),
+                                      BudgetTypesTile(
                                         title: "Production",
                                         value: "\$60,000",
                                         count: "20",
-                                        destination: toProductionExpenses(),
                                       ), //production
-                                      BudgetListTile(
+                                      BudgetTypesTile(
                                         title: "Post Production",
                                         value: "\$15,000",
                                         count: "10",
-                                        destination: toPostProductionExpenses(),
                                       ), //post production
-                                      BudgetListTile(
+                                      BudgetTypesTile(
                                         title: "Other Expenses",
                                         value: "\$12,000",
                                         count: "8",
-                                        destination: toOtherExpenses(),
                                       ), //other expenses
                                       ListTile(
                                         minVerticalPadding: 0,
@@ -721,22 +662,30 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                         ),
                                         Padding(
                                             padding: const EdgeInsets.only(left: 12),
-                                            child: Text(
-                                              "Total Amount",
-                                              style: TextStyle(
-                                                fontFamily: 'SegoeUI',
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 14,
-                                                color: Color(0xff999999),
+                                            child: Hero(
+                                              tag: "SubBudgetTitle",
+                                              child: Text(
+                                                "Total Amount",
+                                                style: TextStyle(
+                                                  fontFamily: 'SegoeUI',
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 14,
+                                                  color: Color(0xff999999),
+                                                ),
                                               ),
                                             )
                                         ),
                                       ],
                                     ),
-                                    Icon(
-                                      Icons.add_circle,
-                                      color: textColor,
-                                      size: 30,
+                                    IconButton(
+                                        onPressed: () {
+                                          Navigator.of(context).push(toNewAboveTheLine());
+                                        },
+                                        icon: Icon(
+                                          Icons.add_circle,
+                                          color: textColor,
+                                          size: 30,
+                                        )
                                     )
                                   ],
                                 ),
@@ -761,93 +710,4 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
       MyHomePage.projectList.add(project);
     });
   }
-}
-
-Route toAboveTheLine() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => AboveTheLine(),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(1, 0);
-      var end = Offset.zero;
-      var curve = Curves.easeInOut;
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-      var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
-
-      return SlideTransition(
-        position: tween.animate(animation),
-        child: child,
-      );
-    }
-  );
-}
-
-Route toProductionExpenses() {
-  return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => ProductionExpenses(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(1, 0);
-        var end = Offset.zero;
-        var curve = Curves.easeInOut;
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
-
-        return SlideTransition(
-          position: tween.animate(animation),
-          child: child,
-        );
-      }
-  );
-}
-
-Route toOtherExpenses() {
-  return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => OtherExpenses(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(1, 0);
-        var end = Offset.zero;
-        var curve = Curves.easeInOut;
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
-
-        return SlideTransition(
-          position: tween.animate(animation),
-          child: child,
-        );
-      }
-  );
-}
-
-Route toPostProductionExpenses() {
-  return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => PostProductionExpenses(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(1, 0);
-        var end = Offset.zero;
-        var curve = Curves.easeInOut;
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
-
-        return SlideTransition(
-          position: tween.animate(animation),
-          child: child,
-        );
-      }
-  );
-}
-
-Route toMain() {
-  return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => MyHomePage(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(0, -1);
-        var end = Offset.zero;
-        var curve = Curves.easeInOut;
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      }
-  );
 }

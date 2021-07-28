@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 
-class BudgetListTile extends StatefulWidget {
+class BudgetTypesTile extends StatefulWidget {
   var title;
   var value;
   var count;
-  var destination;
 
-  BudgetListTile({Key? key, this.title, this.count, this.value, this.destination}) : super(key: key);
+  BudgetTypesTile({Key? key, this.title, this.count, this.value}) : super(key: key);
 
   @override
-  _BudgetListTileState createState() => _BudgetListTileState();
+  _BudgetTypesTileState createState() => _BudgetTypesTileState();
 }
 
-class _BudgetListTileState extends State<BudgetListTile> {
+class _BudgetTypesTileState extends State<BudgetTypesTile> {
 
   Color textColor = Color(0xffD2480A);
   Color subTextColor = Color(0xff999999);
@@ -48,15 +47,18 @@ class _BudgetListTileState extends State<BudgetListTile> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: 8),
-                          child: Text(
-                            widget.title,
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              color: Colors.white,
+                          child: Hero(
+                            tag: 'BudgetTitle',
+                            child: Text(
+                              widget.title,
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
+                          )
                         )
                       ],
                     ),
@@ -103,9 +105,6 @@ class _BudgetListTileState extends State<BudgetListTile> {
           ),
         ),
       ),
-      onTap: () {
-        Navigator.of(context).push(widget.destination);
-      },
     );
   }
 }

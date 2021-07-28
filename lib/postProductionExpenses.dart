@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oneshot/productionExpensesTile.dart';
+import 'package:oneshot/newSubBudgetTile.dart';
 import 'package:oneshot/projectBottomSheet.dart';
 
 class PostProductionExpenses extends StatefulWidget {
@@ -82,11 +82,11 @@ class _PostProductionExpensesState extends State<PostProductionExpenses> {
                 padding: EdgeInsets.only(top: 32),
                 child: Column(
                   children: <Widget>[
-                    ProductionTile(title: "Film Editing"),
-                    ProductionTile(title: "Music"),
-                    ProductionTile(title: "Visual Effects"),
-                    ProductionTile(title: "Post Production Sounds"),
-                    ProductionTile(title: "Post Production Film & Lab"),
+                    NewSubBudgetTile(title: "Film Editing", payeeController: new TextEditingController(), amountController: new TextEditingController()),
+                    // SubBudgetTile(title: "Music"),
+                    // SubBudgetTile(title: "Visual Effects"),
+                    // SubBudgetTile(title: "Post Production Sounds"),
+                    // SubBudgetTile(title: "Post Production Film & Lab"),
                   ],
                 ),
               ),
