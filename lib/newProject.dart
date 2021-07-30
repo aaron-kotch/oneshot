@@ -45,6 +45,8 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
     });
   }
 
+  Map<String, int> budgetAmount = {'Above The Line': 0, 'Production': 0, 'Post Production': 0, 'Other': 0, 'Total': 0};
+
   @override
   Widget build(BuildContext context) {
 
@@ -95,7 +97,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                           ),
                           Container(
                             child: Text(
-                              'Budget Sheet',
+                              'Project 1',
                               style: TextStyle(
                                 fontFamily: 'Calibri',
                                 fontWeight: FontWeight.w300,
@@ -508,43 +510,53 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                   child: ListView(
                                     shrinkWrap: true,
                                     children: <Widget>[
-                                      OpenContainer(
-                                        closedBuilder: (context, action) {
-                                          return BudgetTypesTile(
-                                            title: "Above The Line",
-                                            value: "\$15,000",
-                                            count: "10",
-                                          );
-                                        },
-                                        openBuilder: (context, action) => AboveTheLine(),
-                                        closedElevation: 0,
-                                        openElevation: 0,
-                                        closedShape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.zero
-                                        ),
-                                        closedColor: baseColor,
-                                        openColor: baseColor,
-                                        transitionDuration: Duration(milliseconds: 300),
-                                        onClosed: (val) {
-                                          setState(() {
+                                      BudgetTypesTile(
+                                        title: "Above The Line",
+                                        value: "\$ ${budget()["Above The Line"]![0]}",
+                                        count: "${budget()["Above The Line"]![1]}",
+                                        onPressed: () {
+                                          Navigator.of(context).push(toAboveTheLine()).then((value) {
+                                            setState(() {
 
+                                            });
                                           });
                                         },
                                       ),
                                       BudgetTypesTile(
                                         title: "Production",
-                                        value: "\$60,000",
-                                        count: "20",
+                                        value: "\$ ${budget()["Production"]![0]}",
+                                        count: "${budget()["Production"]![1]}",
+                                        onPressed: () {
+                                          Navigator.of(context).push(toProductionExpenses()).then((value) {
+                                            setState(() {
+
+                                            });
+                                          });
+                                        },
                                       ), //production
                                       BudgetTypesTile(
                                         title: "Post Production",
-                                        value: "\$15,000",
-                                        count: "10",
+                                        value: "\$ ${budget()["Post Production"]![0]}",
+                                        count: "${budget()["Post Production"]![1]}",
+                                        onPressed: () {
+                                          Navigator.of(context).push(toPostProductionExpenses()).then((value) {
+                                            setState(() {
+
+                                            });
+                                          });
+                                        },
                                       ), //post production
                                       BudgetTypesTile(
                                         title: "Other Expenses",
-                                        value: "\$12,000",
-                                        count: "8",
+                                        value: "\$ ${budget()["Other"]![0]}",
+                                        count: "${budget()["Other"]![1]}",
+                                        onPressed: () {
+                                          Navigator.of(context).push(toOtherExpenses()).then((value) {
+                                            setState(() {
+
+                                            });
+                                          });
+                                        },
                                       ), //other expenses
                                       ListTile(
                                         minVerticalPadding: 0,
@@ -589,7 +601,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                                       Padding(
                                                         padding: EdgeInsets.only(top: 4, left: 18),
                                                         child: Text(
-                                                          "\$ 102,000",
+                                                          "\$ ${budget()["Total"]![0]}",
                                                           style: TextStyle(
                                                             fontFamily: 'Inter',
                                                             fontWeight: FontWeight.w400,
@@ -613,7 +625,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                                       Padding(
                                                         padding: EdgeInsets.only(left: 4, right: 8),
                                                         child: Text(
-                                                          "48",
+                                                          "${budget()["Total"]![1]}",
                                                           style: TextStyle(
                                                             fontFamily: 'Inter',
                                                             fontWeight: FontWeight.w400,
@@ -662,24 +674,21 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                         ),
                                         Padding(
                                             padding: const EdgeInsets.only(left: 12),
-                                            child: Hero(
-                                              tag: "SubBudgetTitle",
-                                              child: Text(
-                                                "Total Amount",
-                                                style: TextStyle(
-                                                  fontFamily: 'SegoeUI',
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 14,
-                                                  color: Color(0xff999999),
-                                                ),
+                                            child: Text(
+                                              "Total Amount",
+                                              style: TextStyle(
+                                                fontFamily: 'SegoeUI',
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14,
+                                                color: Color(0xff999999),
                                               ),
-                                            )
+                                            ),
                                         ),
                                       ],
                                     ),
                                     IconButton(
                                         onPressed: () {
-                                          Navigator.of(context).push(toNewAboveTheLine());
+                                          //Navigator.of(context).push(toNewAboveTheLine());
                                         },
                                         icon: Icon(
                                           Icons.add_circle,
@@ -710,4 +719,44 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
       MyHomePage.projectList.add(project);
     });
   }
+
+  Map<String, List<int>> budget() {
+    Map<String, List<int>> budgetAmount = {'Above The Line': [0, 0], 'Production': [0, 0], 'Post Production': [0, 0], 'Other': [0, 0], 'Total': [0, 0]};
+
+    int atlAmount = 0, atlPayee = 0;
+    int pAmount = 0, pPayee = 0;
+    int pPAmount = 0, pPPayee = 0;
+    int oAmount = 0, oPayee = 0;
+    int totalAmount = 0, totalPayee = 0;
+
+    for (var i in AboveTheLine.list) {
+      atlAmount = atlAmount + int.parse(i.totalAmount);
+      atlPayee = atlPayee + int.parse(i.totalPayee);
+    }
+
+    for (var i in ProductionExpenses.productionBudgetList) {
+      for (var x in i) {
+        pAmount = pAmount + int.parse(x.totalAmount);
+        pPayee = pPayee + int.parse(x.totalPayee);
+      }
+    }
+
+    for (var i in PostProductionExpenses.postProductionList) {
+      pPAmount = pPAmount + int.parse(i.totalAmount);
+      pPPayee = pPPayee + int.parse(i.totalPayee);
+    }
+
+    for (var i in OtherExpenses.otherList) {
+      oAmount = oAmount + int.parse(i.totalAmount);
+      oPayee = oPayee + int.parse(i.totalPayee);
+    }
+
+    totalPayee = atlPayee + pPPayee + pPPayee + oPayee;
+    totalAmount = atlAmount + pPAmount + pPAmount + oAmount;
+
+    budgetAmount = {'Above The Line': [atlAmount, atlPayee], 'Production': [pAmount, pPayee], 'Post Production': [pPAmount, pPPayee], 'Other': [oAmount, oPayee], 'Total': [totalAmount, totalPayee]};
+
+    return budgetAmount;
+  }
+
 }

@@ -1,42 +1,41 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oneshot/classes/Budget.dart';
 import 'package:oneshot/newSubBudgetTile.dart';
-import 'package:oneshot/pageRoutes.dart';
 import 'package:oneshot/projectBottomSheet.dart';
 import 'package:oneshot/subBudgetTile.dart';
 
-import 'classes/Budget.dart';
+class NewOtherExpenses extends StatefulWidget {
+  const NewOtherExpenses({Key? key, required this.list}) : super(key: key);
 
-class PostProductionExpenses extends StatefulWidget {
-  const PostProductionExpenses({Key? key}) : super(key: key);
-
-  static List<Budget> postProductionList = [
-    Budget(title: "Film Editing"),
-    Budget(title: "Music"),
-    Budget(title: "Visual Effects"),
-    Budget(title: "Post Production Sounds"),
-    Budget(title: "Post Production Film & Lab"),
-  ];
+  final List<Budget> list;
 
   @override
-  _PostProductionExpensesState createState() => _PostProductionExpensesState();
+  _NewOtherExpensesState createState() => _NewOtherExpensesState();
 }
 
-class _PostProductionExpensesState extends State<PostProductionExpenses> {
-
+class _NewOtherExpensesState extends State<NewOtherExpenses> {
   Color textColor = Color(0xffD2480A);
   Color subTextColor = Color(0xff999999);
   Color borderColor = Color(0xff0E0E0E);
 
+  List<List<TextEditingController>> _textController = [];
+
   @override
   void dispose() {
     super.dispose();
+    for (var x in _textController) {
+      for (var y in x) {
+        y.dispose();
+      }
+    }
   }
 
   @override
   void initState() {
     super.initState();
+
+    _textController = new List.generate(widget.list.length, (index) => [new TextEditingController(), new TextEditingController()]);
   }
 
   @override
@@ -72,7 +71,7 @@ class _PostProductionExpensesState extends State<PostProductionExpenses> {
                       ),
                       Container(
                         child: Text(
-                          'Post Production Expenses',
+                          'Other Expenses',
                           style: TextStyle(
                             fontFamily: 'Calibri',
                             fontWeight: FontWeight.w300,
@@ -101,16 +100,19 @@ class _PostProductionExpensesState extends State<PostProductionExpenses> {
                 ),
               ), // top
               Expanded(
-                child: ListView.builder(
-                  padding: EdgeInsets.only(top: 20, bottom: 20),
-                  itemCount: PostProductionExpenses.postProductionList.length,
-                  itemBuilder: (context, index) {
-                    return SubBudgetTile(
-                      title: PostProductionExpenses.postProductionList[index].title,
-                      payee: PostProductionExpenses.postProductionList[index].totalPayee == "0" ? "-" : PostProductionExpenses.postProductionList[index].totalPayee,
-                      amount: PostProductionExpenses.postProductionList[index].totalAmount == "0" ? "-" : PostProductionExpenses.postProductionList[index].totalAmount,
-                    );
-                  }
+                child: Container(
+                  padding: EdgeInsets.only(top: 32),
+                  child: ListView.builder(
+                      itemCount: widget.list.length,
+                      itemBuilder: (context, index) {
+                        return NewSubBudgetTile(
+                            title: widget.list[index].title,
+                            payeeController: _textController[index][0],
+                            amountController: _textController[index][1],
+                            list: widget.list
+                        );
+                      }
+                  ),
                 ),
               ),
               Container(
@@ -153,11 +155,7 @@ class _PostProductionExpensesState extends State<PostProductionExpenses> {
                     ),
                     IconButton(
                         onPressed: () {
-                          Navigator.of(context).push(toNewPostProductionExpenses(PostProductionExpenses.postProductionList)).then((value) {
-                            setState(() {
 
-                            });
-                          });
                         },
                         icon: Icon(
                           Icons.add_circle,

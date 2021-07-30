@@ -4,8 +4,9 @@ class BudgetTypesTile extends StatefulWidget {
   var title;
   var value;
   var count;
+  Function onPressed;
 
-  BudgetTypesTile({Key? key, this.title, this.count, this.value}) : super(key: key);
+  BudgetTypesTile({Key? key, this.title, this.count, this.value, required this.onPressed}) : super(key: key);
 
   @override
   _BudgetTypesTileState createState() => _BudgetTypesTileState();
@@ -22,6 +23,9 @@ class _BudgetTypesTileState extends State<BudgetTypesTile> {
     return  ListTile(
       minVerticalPadding: 0,
       contentPadding: EdgeInsets.zero,
+      onTap: () {
+        widget.onPressed();
+      },
       title: Container(
         padding: const EdgeInsets.only(left: 32, right: 32),
         child: Container(
@@ -47,18 +51,15 @@ class _BudgetTypesTileState extends State<BudgetTypesTile> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: 8),
-                          child: Hero(
-                            tag: 'BudgetTitle',
-                            child: Text(
-                              widget.title,
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
+                          child: Text(
+                            widget.title,
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                              color: Colors.white,
                             ),
-                          )
+                          ),
                         )
                       ],
                     ),

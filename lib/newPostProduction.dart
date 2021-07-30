@@ -6,16 +6,16 @@ import 'package:oneshot/classes/Budget.dart';
 import 'package:oneshot/projectBottomSheet.dart';
 import 'package:oneshot/newSubBudgetTile.dart';
 
-class NewAboveTheLine extends StatefulWidget {
-  const NewAboveTheLine({Key? key, required this.list}) : super(key: key);
+class NewPostProduction extends StatefulWidget {
+  const NewPostProduction({Key? key, required this.list}) : super(key: key);
 
   final list;
 
   @override
-  _NewAboveTheLineState createState() => _NewAboveTheLineState();
+  _NewPostProductionState createState() => _NewPostProductionState();
 }
 
-class _NewAboveTheLineState extends State<NewAboveTheLine> {
+class _NewPostProductionState extends State<NewPostProduction> {
 
   Color textColor = Color(0xffD2480A);
   Color subTextColor = Color(0xff999999);
@@ -23,11 +23,10 @@ class _NewAboveTheLineState extends State<NewAboveTheLine> {
 
   List<List<TextEditingController>> _textController = [];
 
-  List<String> titleList = ["Development Rights", "Story & Rights", "Director & Staff", "Cast", "Travel & Living"];
-
   @override
   void dispose() {
     super.dispose();
+
     for (var x in _textController) {
       for (var y in x) {
         y.dispose();
@@ -39,7 +38,7 @@ class _NewAboveTheLineState extends State<NewAboveTheLine> {
   void initState() {
     super.initState();
 
-    _textController = new List.generate(titleList.length, (index) => [new TextEditingController(), new TextEditingController()]);
+    _textController = new List.generate(widget.list.length, (index) => [new TextEditingController(), new TextEditingController()]);
   }
 
   @override
@@ -76,7 +75,6 @@ class _NewAboveTheLineState extends State<NewAboveTheLine> {
                           setState(() {
 
                           });
-
                           Navigator.pop(context);
                         },
                       ),
@@ -111,18 +109,18 @@ class _NewAboveTheLineState extends State<NewAboveTheLine> {
                 ),
               ), // top
               Expanded(
-                child: ListView.builder(
-                  itemCount: titleList.length,
-                  itemBuilder: (context, index) {
-                    return NewSubBudgetTile(
-                      payeeController: _textController[index][0],
-                      amountController: _textController[index][1],
-                      title: titleList[index],
-                      index: index,
-                      list: widget.list,
-                    );
-                  }
-                )
+                  child: ListView.builder(
+                      itemCount: widget.list.length,
+                      itemBuilder: (context, index) {
+                        return NewSubBudgetTile(
+                          payeeController: _textController[index][0],
+                          amountController: _textController[index][1],
+                          title: widget.list[index].title,
+                          index: index,
+                          list: widget.list,
+                        );
+                      }
+                  )
               ), // main listview
             ],
           ),
@@ -130,5 +128,4 @@ class _NewAboveTheLineState extends State<NewAboveTheLine> {
       ),
     );
   }
-
 }

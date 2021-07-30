@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oneshot/classes/AboveTheLineObject.dart';
+import 'package:oneshot/classes/Budget.dart';
 import 'package:oneshot/pageRoutes.dart';
 import 'package:oneshot/projectBottomSheet.dart';
 import 'package:oneshot/subBudgetTile.dart';
@@ -10,7 +10,13 @@ class AboveTheLine extends StatefulWidget {
 
   const AboveTheLine({Key? key}) : super(key: key);
 
-  static List<AboveTheLineObject> itemList = [];
+  static List<Budget> list = [
+    new Budget(title: "Development Rights"),
+    new Budget(title: "Story & Rights"),
+    new Budget(title: "Director & Staff"),
+    new Budget(title: "Cast"),
+    new Budget(title: "Travel & Living"),
+  ];
 
   @override
   _AboveTheLineState createState() => _AboveTheLineState();
@@ -21,6 +27,17 @@ class _AboveTheLineState extends State<AboveTheLine> {
   Color textColor = Color(0xffD2480A);
   Color subTextColor = Color(0xff999999);
   Color borderColor = Color(0xff0E0E0E);
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,16 +76,13 @@ class _AboveTheLineState extends State<AboveTheLine> {
                         },
                       ),
                       Container(
-                        child: Hero(
-                          tag: 'BudgetTitle',
-                          child: Text(
-                            'Above The Line',
-                            style: TextStyle(
-                              fontFamily: 'Calibri',
-                              fontWeight: FontWeight.w300,
-                              fontSize: 24,
-                              color: Colors.white,
-                            ),
+                        child: Text(
+                          'Above The Line',
+                          style: TextStyle(
+                            fontFamily: 'Calibri',
+                            fontWeight: FontWeight.w300,
+                            fontSize: 24,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -93,15 +107,16 @@ class _AboveTheLineState extends State<AboveTheLine> {
               ), // top
               Expanded(
                 child: ListView.builder(
-                  itemCount: AboveTheLine.itemList.length,
+                  itemCount: AboveTheLine.list.length,
+                  shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return SubBudgetTile(
-                      title: AboveTheLine.itemList[index].title,
-                      payee: AboveTheLine.itemList[index].totalPayee,
-                      amount: AboveTheLine.itemList[index].totalAmount,
+                      title: AboveTheLine.list[index].title,
+                      payee: AboveTheLine.list[index].totalPayee == "0" ? "-" : AboveTheLine.list[index].totalPayee,
+                      amount: AboveTheLine.list[index].totalAmount == "0" ? "-" : AboveTheLine.list[index].totalAmount,
                     );
-                  },
-                ),
+                  }
+                )
               ), // main listview
               Container(
                 height: 72,
@@ -130,7 +145,7 @@ class _AboveTheLineState extends State<AboveTheLine> {
                         Padding(
                             padding: const EdgeInsets.only(left: 12),
                             child: Text(
-                              "Total Amount",
+                              totalValue().toString(),
                               style: TextStyle(
                                 fontFamily: 'SegoeUI',
                                 fontWeight: FontWeight.w400,
@@ -143,7 +158,7 @@ class _AboveTheLineState extends State<AboveTheLine> {
                     ),
                     IconButton(
                       onPressed: () {
-                        Navigator.of(context).push(toNewAboveTheLine());
+                        Navigator.of(context).push(toNewAboveTheLine(AboveTheLine.list));
                       },
                       icon: Icon(
                         Icons.add_circle,
@@ -160,4 +175,13 @@ class _AboveTheLineState extends State<AboveTheLine> {
       ),
     );
   }
+
+  int totalValue() {
+    int total = 0;
+    for (var i in AboveTheLine.list) {
+      total = total + int.parse(i.totalAmount);
+    }
+    return total;
+  }
+
 }

@@ -1,10 +1,22 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oneshot/classes/Budget.dart';
 import 'package:oneshot/newSubBudgetTile.dart';
+import 'package:oneshot/pageRoutes.dart';
 import 'package:oneshot/projectBottomSheet.dart';
+import 'package:oneshot/subBudgetTile.dart';
 
 class OtherExpenses extends StatefulWidget {
   const OtherExpenses({Key? key}) : super(key: key);
+
+  static List<Budget> otherList = [
+    Budget(title: "Publicity"),
+    Budget(title: "Legal & Accounting"),
+    Budget(title: "General Expenses"),
+    Budget(title: "Insurance"),
+  ];
 
   @override
   _OtherExpensesState createState() => _OtherExpensesState();
@@ -76,18 +88,21 @@ class _OtherExpensesState extends State<OtherExpenses> {
                   ),
                 ),
               ), // top
-              Container(
-                padding: EdgeInsets.only(top: 32),
-                child: Column(
-                  children: <Widget>[
-                    NewSubBudgetTile(title: "Publicity", payeeController: new TextEditingController(), amountController: new TextEditingController()),
-                    // SubBudgetTile(title: "Legal & Accounting"),
-                    // SubBudgetTile(title: "General Expenses"),
-                    // SubBudgetTile(title: "Insurance"),
-                  ]
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(top: 32),
+                  child: ListView.builder(
+                    itemCount: OtherExpenses.otherList.length,
+                    itemBuilder: (context, index) {
+                      return SubBudgetTile(
+                          title: OtherExpenses.otherList[index].title,
+                        payee: OtherExpenses.otherList[index].totalPayee == "0" ? "-" : OtherExpenses.otherList[index].totalPayee,
+                        amount: OtherExpenses.otherList[index].totalAmount == "0" ? "-" : OtherExpenses.otherList[index].totalAmount,
+                      );
+                    }
+                  ),
                 ),
               ),
-              Spacer(),
               Container(
                 height: 72,
                 alignment: Alignment.center,
@@ -128,7 +143,11 @@ class _OtherExpensesState extends State<OtherExpenses> {
                     ),
                     IconButton(
                         onPressed: () {
+                          Navigator.of(context).push(toNewOtherExpenses(OtherExpenses.otherList)).then((value) {
+                            setState(() {
 
+                            });
+                          });
                         },
                         icon: Icon(
                           Icons.add_circle,

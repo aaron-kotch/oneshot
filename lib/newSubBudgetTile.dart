@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:oneshot/aboveTheLine.dart';
+import 'package:oneshot/newAboveTheLine.dart';
 
 class NewSubBudgetTile extends StatefulWidget {
 
-  NewSubBudgetTile({Key? key, required this.title, required this.payeeController, required this.amountController}) : super(key: key);
+  NewSubBudgetTile({Key? key, required this.title, required this.payeeController, required this.amountController, this.index = 0, required this.list}) : super(key: key);
 
   final String title;
   final TextEditingController payeeController;
   final TextEditingController amountController;
+  final List<dynamic> list;
+  int index;
 
   @override
   _NewSubBudgetTileState createState() => _NewSubBudgetTileState();
@@ -78,6 +82,9 @@ class _NewSubBudgetTileState extends State<NewSubBudgetTile> {
                 child: TextField(
                   controller: widget.payeeController,
                   keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    widget.list[widget.index].totalPayee = value;
+                  },
                   style: TextStyle(
                     fontFamily: "SegoeUI",
                     fontWeight: FontWeight.w400,
@@ -123,6 +130,9 @@ class _NewSubBudgetTileState extends State<NewSubBudgetTile> {
                     fontSize: 16,
                     color: subTextColor,
                   ),
+                  onChanged: (value) {
+                    widget.list[widget.index].totalAmount = value;
+                  },
                   decoration: InputDecoration(
                       hintText: "Total Amount",
                       hintStyle: TextStyle(
