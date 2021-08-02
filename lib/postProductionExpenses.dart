@@ -6,18 +6,22 @@ import 'package:oneshot/pageRoutes.dart';
 import 'package:oneshot/projectBottomSheet.dart';
 import 'package:oneshot/subBudgetTile.dart';
 
-import 'classes/Budget.dart';
+import 'classes/BudgetDetails.dart';
 
 class PostProductionExpenses extends StatefulWidget {
-  const PostProductionExpenses({Key? key}) : super(key: key);
+  PostProductionExpenses({Key? key, required this.projectIndex}) : super(key: key);
 
-  static List<Budget> postProductionList = [
-    Budget(title: "Film Editing"),
-    Budget(title: "Music"),
-    Budget(title: "Visual Effects"),
-    Budget(title: "Post Production Sounds"),
-    Budget(title: "Post Production Film & Lab"),
+  final int projectIndex;
+
+  List<BudgetDetails> postProductionList = [
+    BudgetDetails(title: "Film Editing"),
+    BudgetDetails(title: "Music"),
+    BudgetDetails(title: "Visual Effects"),
+    BudgetDetails(title: "Post Production Sounds"),
+    BudgetDetails(title: "Post Production Film & Lab"),
   ];
+
+  List<BudgetDetails> get itemList => postProductionList;
 
   @override
   _PostProductionExpensesState createState() => _PostProductionExpensesState();
@@ -92,7 +96,7 @@ class _PostProductionExpensesState extends State<PostProductionExpenses> {
                               backgroundColor: Color(0xff131212),
                               context: context,
                               builder: (context) {
-                                return ProjectBottomSheet();
+                                return ProjectBottomSheet(index: widget.projectIndex);
                               });
                         },
                       )
@@ -103,12 +107,12 @@ class _PostProductionExpensesState extends State<PostProductionExpenses> {
               Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.only(top: 20, bottom: 20),
-                  itemCount: PostProductionExpenses.postProductionList.length,
+                  itemCount: widget.postProductionList.length,
                   itemBuilder: (context, index) {
                     return SubBudgetTile(
-                      title: PostProductionExpenses.postProductionList[index].title,
-                      payee: PostProductionExpenses.postProductionList[index].totalPayee == "0" ? "-" : PostProductionExpenses.postProductionList[index].totalPayee,
-                      amount: PostProductionExpenses.postProductionList[index].totalAmount == "0" ? "-" : PostProductionExpenses.postProductionList[index].totalAmount,
+                      title: widget.postProductionList[index].title,
+                      payee: widget.postProductionList[index].totalPayee == "0" ? "-" : widget.postProductionList[index].totalPayee,
+                      amount: widget.postProductionList[index].totalAmount == "0" ? "-" : widget.postProductionList[index].totalAmount,
                     );
                   }
                 ),
@@ -153,7 +157,7 @@ class _PostProductionExpensesState extends State<PostProductionExpenses> {
                     ),
                     IconButton(
                         onPressed: () {
-                          Navigator.of(context).push(toNewPostProductionExpenses(PostProductionExpenses.postProductionList)).then((value) {
+                          Navigator.of(context).push(toNewPostProductionExpenses(widget.postProductionList, widget.projectIndex)).then((value) {
                             setState(() {
 
                             });

@@ -1,5 +1,6 @@
 class Projects {
 
+  final String projectName;
   final String company;
   final String title;
   final String prepareBy;
@@ -10,6 +11,6 @@ class Projects {
   final String location;
 
 
-  Projects(this.company, this.title, this.prepareBy, this.budgetDate, this.shootDays, this.producers, this.union, this.location);
+  Projects(this.projectName, this.company, this.title, this.prepareBy, this.budgetDate, this.shootDays, this.producers, this.union, this.location);
 
 }

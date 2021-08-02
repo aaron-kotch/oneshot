@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oneshot/classes/Budget.dart';
+import 'package:oneshot/classes/BudgetDetails.dart';
 import 'package:oneshot/newSubBudgetTile.dart';
 import 'package:oneshot/projectBottomSheet.dart';
 import 'package:oneshot/subBudgetTile.dart';
 
 class NewOtherExpenses extends StatefulWidget {
-  const NewOtherExpenses({Key? key, required this.list}) : super(key: key);
+  const NewOtherExpenses({Key? key, required this.list, required this.projectIndex}) : super(key: key);
 
-  final List<Budget> list;
+  final List<BudgetDetails> list;
+  final int projectIndex;
 
   @override
   _NewOtherExpensesState createState() => _NewOtherExpensesState();
@@ -91,7 +92,7 @@ class _NewOtherExpensesState extends State<NewOtherExpenses> {
                               backgroundColor: Color(0xff131212),
                               context: context,
                               builder: (context) {
-                                return ProjectBottomSheet();
+                                return ProjectBottomSheet(index: widget.projectIndex);
                               });
                         },
                       )

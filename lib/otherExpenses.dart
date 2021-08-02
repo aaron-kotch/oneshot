@@ -2,21 +2,25 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oneshot/classes/Budget.dart';
+import 'package:oneshot/classes/BudgetDetails.dart';
 import 'package:oneshot/newSubBudgetTile.dart';
 import 'package:oneshot/pageRoutes.dart';
 import 'package:oneshot/projectBottomSheet.dart';
 import 'package:oneshot/subBudgetTile.dart';
 
 class OtherExpenses extends StatefulWidget {
-  const OtherExpenses({Key? key}) : super(key: key);
+  OtherExpenses({Key? key, required this.projectIndex}) : super(key: key);
 
-  static List<Budget> otherList = [
-    Budget(title: "Publicity"),
-    Budget(title: "Legal & Accounting"),
-    Budget(title: "General Expenses"),
-    Budget(title: "Insurance"),
+  final int projectIndex;
+
+  List<BudgetDetails> otherList = [
+    BudgetDetails(title: "Publicity"),
+    BudgetDetails(title: "Legal & Accounting"),
+    BudgetDetails(title: "General Expenses"),
+    BudgetDetails(title: "Insurance"),
   ];
+
+  List<BudgetDetails> get itemList => otherList;
 
   @override
   _OtherExpensesState createState() => _OtherExpensesState();
@@ -80,7 +84,7 @@ class _OtherExpensesState extends State<OtherExpenses> {
                               backgroundColor: Color(0xff131212),
                               context: context,
                               builder: (context) {
-                                return ProjectBottomSheet();
+                                return ProjectBottomSheet(index: widget.projectIndex);
                               });
                         },
                       )
@@ -92,12 +96,12 @@ class _OtherExpensesState extends State<OtherExpenses> {
                 child: Container(
                   padding: EdgeInsets.only(top: 32),
                   child: ListView.builder(
-                    itemCount: OtherExpenses.otherList.length,
+                    itemCount: widget.otherList.length,
                     itemBuilder: (context, index) {
                       return SubBudgetTile(
-                          title: OtherExpenses.otherList[index].title,
-                        payee: OtherExpenses.otherList[index].totalPayee == "0" ? "-" : OtherExpenses.otherList[index].totalPayee,
-                        amount: OtherExpenses.otherList[index].totalAmount == "0" ? "-" : OtherExpenses.otherList[index].totalAmount,
+                          title: widget.otherList[index].title,
+                        payee: widget.otherList[index].totalPayee == "0" ? "-" : widget.otherList[index].totalPayee,
+                        amount: widget.otherList[index].totalAmount == "0" ? "-" : widget.otherList[index].totalAmount,
                       );
                     }
                   ),
@@ -143,7 +147,7 @@ class _OtherExpensesState extends State<OtherExpenses> {
                     ),
                     IconButton(
                         onPressed: () {
-                          Navigator.of(context).push(toNewOtherExpenses(OtherExpenses.otherList)).then((value) {
+                          Navigator.of(context).push(toNewOtherExpenses(widget.otherList, widget.projectIndex)).then((value) {
                             setState(() {
 
                             });

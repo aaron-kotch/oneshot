@@ -5,12 +5,13 @@ import 'package:oneshot/newSubBudgetTile.dart';
 import 'package:oneshot/pageRoutes.dart';
 import 'package:oneshot/projectBottomSheet.dart';
 
-import 'classes/Budget.dart';
+import 'classes/BudgetDetails.dart';
 
 class NewProductionExpenses extends StatefulWidget {
-  const NewProductionExpenses({Key? key, required this.list}) : super(key: key);
+  const NewProductionExpenses({Key? key, required this.list, required this.projectIndex}) : super(key: key);
 
-  final List<List<Budget>> list;
+  final List<List<BudgetDetails>> list;
+  final int projectIndex;
 
   @override
   _NewProductionExpensesState createState() => _NewProductionExpensesState();
@@ -200,7 +201,7 @@ class _NewProductionExpensesState extends State<NewProductionExpenses> {
                                 backgroundColor: Color(0xff131212),
                                 context: context,
                                 builder: (context) {
-                                  return ProjectBottomSheet();
+                                  return ProjectBottomSheet(index: widget.projectIndex,);
                                 });
                           },
                         )

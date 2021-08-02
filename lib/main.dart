@@ -4,11 +4,12 @@ import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oneshot/classes/BudgetDetails.dart';
 import 'package:oneshot/classes/Projects.dart';
 import 'package:oneshot/customWidgets/CustomExpansionTile.dart';
 import 'package:oneshot/drawer.dart';
 import 'package:oneshot/dropdownList.dart';
-import 'package:oneshot/newProject.dart';
+import 'package:oneshot/viewProject.dart';
 import 'package:oneshot/pageRoutes.dart';
 import 'package:oneshot/settings.dart';
 import 'package:oneshot/templateMenu.dart';
@@ -16,6 +17,7 @@ import 'package:oneshot/test.dart';
 
 import 'CustomExpansionPanel.dart';
 import 'deleted.dart';
+import 'newProject.dart';
 
 void main() {
   runApp(MyApp());
@@ -43,10 +45,10 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
 
-  static List<Projects> projectList = [];
-  static final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  const MyHomePage({Key? key, this.isExpanded = false});
 
-  const MyHomePage({Key? key, this.isExpanded = false}) : assert(isExpanded != null);
+  static List<List<dynamic>> projectList = [];
+  static final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final bool isExpanded;
 
@@ -96,10 +98,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         systemNavigationBarIconBrightness: Brightness.light
     ));
 
-    var width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var width = MediaQuery.of(context).size.width;
 
     return SafeArea(
       child: new GestureDetector(
@@ -215,137 +214,81 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                               ),
                             ),
                           ),
-                          ListTile(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 20,
-                                vertical: 20),
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: <Widget>[
-                                    CircleAvatar(
-                                      backgroundColor: Colors.red[700],
-                                      radius: 6,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 16),
-                                      child: Text(
-                                        "Project 1",
-                                        style: TextStyle(
-                                            fontFamily: 'CenturyGothic',
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.white
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 8),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.event_rounded,
-                                        size: 12,
-                                        color: Colors.grey[400],
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 16),
-                                        child: Text(
-                                          "01/01/2021",
-                                          style: TextStyle(
-                                              fontFamily: 'CenturyGothic',
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.white
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            onTap: () {
-                              Navigator.of(context).push(createProject());
-                            },
-                          ),
                           Container(
-                            padding: EdgeInsets.only(top: 16),
+                            padding: EdgeInsets.only(top: 4),
                             width: width,
                             child: ListView.builder(
                                 shrinkWrap: true,
                                 itemCount: MyHomePage.projectList.length,
                                 itemBuilder: (context, index) {
-                                  return Container(
-                                    padding: EdgeInsets.only(top: 16,
-                                        left: 20,
-                                        right: 20,
-                                        bottom: 16),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .start,
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: <Widget>[
-                                            CircleAvatar(
-                                              backgroundColor: Colors.red[700],
-                                              radius: 6,
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 16),
-                                              child: Text(
-                                                "Project ${index + 1}",
-                                                style: TextStyle(
-                                                    fontFamily: 'CenturyGothic',
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: Colors.white
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(top: 8),
-                                          child: Row(
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).push(toViewProject(index));
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.only(top: 16,
+                                          left: 20,
+                                          right: 20,
+                                          bottom: 16),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start,
+                                        children: <Widget>[
+                                          Row(
                                             mainAxisAlignment: MainAxisAlignment
                                                 .start,
                                             mainAxisSize: MainAxisSize.max,
                                             children: <Widget>[
-                                              Icon(
-                                                Icons.event_rounded,
-                                                size: 12,
-                                                color: Colors.grey[400],
+                                              CircleAvatar(
+                                                backgroundColor: Colors.red[700],
+                                                radius: 6,
                                               ),
                                               Padding(
                                                 padding: EdgeInsets.only(
                                                     left: 16),
                                                 child: Text(
-                                                  MyHomePage.projectList[index]
-                                                      .budgetDate,
+                                                  "${MyHomePage.projectList[index][0].projectName}", //TODO
                                                   style: TextStyle(
                                                       fontFamily: 'CenturyGothic',
                                                       fontSize: 16,
-                                                      fontWeight: FontWeight
-                                                          .w400,
+                                                      fontWeight: FontWeight.w400,
                                                       color: Colors.white
                                                   ),
                                                 ),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      ],
+                                          Padding(
+                                            padding: EdgeInsets.only(top: 8),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .start,
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: <Widget>[
+                                                Icon(
+                                                  Icons.event_rounded,
+                                                  size: 12,
+                                                  color: Colors.grey[400],
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 16),
+                                                  child: Text(
+                                                    MyHomePage.projectList[index][0].budgetDate,
+                                                    style: TextStyle(
+                                                        fontFamily: 'CenturyGothic',
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight
+                                                            .w400,
+                                                        color: Colors.white
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   );
                                 }),

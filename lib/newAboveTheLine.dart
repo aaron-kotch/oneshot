@@ -2,14 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oneshot/aboveTheLine.dart';
-import 'package:oneshot/classes/Budget.dart';
+import 'package:oneshot/classes/BudgetDetails.dart';
 import 'package:oneshot/projectBottomSheet.dart';
 import 'package:oneshot/newSubBudgetTile.dart';
 
 class NewAboveTheLine extends StatefulWidget {
-  const NewAboveTheLine({Key? key, required this.list}) : super(key: key);
+  const NewAboveTheLine({Key? key, required this.list, required this.projectIndex}) : super(key: key);
 
   final list;
+  final int projectIndex;
 
   @override
   _NewAboveTheLineState createState() => _NewAboveTheLineState();
@@ -28,7 +29,7 @@ class _NewAboveTheLineState extends State<NewAboveTheLine> {
   @override
   void dispose() {
     super.dispose();
-    for (var x in _textController) {
+    for (var x in _textController) { //dispose text controllers
       for (var y in x) {
         y.dispose();
       }
@@ -102,7 +103,7 @@ class _NewAboveTheLineState extends State<NewAboveTheLine> {
                               backgroundColor: Color(0xff131212),
                               context: context,
                               builder: (context) {
-                                return ProjectBottomSheet();
+                                return ProjectBottomSheet(index: widget.projectIndex,);
                               });
                         },
                       )

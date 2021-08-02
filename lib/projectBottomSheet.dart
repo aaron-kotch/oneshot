@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:oneshot/main.dart';
 
 class ProjectBottomSheet extends StatefulWidget {
-  const ProjectBottomSheet({Key? key}) : super(key: key);
+  const ProjectBottomSheet({Key? key, required this.index}) : super(key: key);
+
+  final int index;
 
   @override
   _ProjectBottomSheetState createState() => _ProjectBottomSheetState();
@@ -90,6 +93,7 @@ class _ProjectBottomSheetState extends State<ProjectBottomSheet> {
                 color: Colors.white,
               ),
             ),
+            //onTap: () => Navigator.pop(context),
           ),
           ListTile(
             leading: Icon(Icons.delete, color: textColor),
@@ -102,6 +106,67 @@ class _ProjectBottomSheetState extends State<ProjectBottomSheet> {
                 color: Colors.white,
               ),
             ),
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      backgroundColor: Color(0xff1E1E1E),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      title: Text(
+                        "Delete Project",
+                        style: TextStyle(
+                          fontFamily: 'Calibri',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                      content: Text(
+                        "Are you sure?",
+                        style: TextStyle(
+                          fontFamily: 'Calibri',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text(
+                            "No",
+                            style: TextStyle(
+                              fontFamily: 'Calibri',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: textColor,
+                            ),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        TextButton(
+                          child: Text(
+                            "Yes",
+                            style: TextStyle(
+                              fontFamily: 'Calibri',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: textColor,
+                            ),
+                          ),
+                          onPressed: () {
+                            MyHomePage.projectList.removeAt(widget.index);
+                            Navigator.popUntil(context, (route) => route.isFirst);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                barrierDismissible: true,
+              );
+            },
           ),
           Container(
             margin: EdgeInsets.only(top: 8),

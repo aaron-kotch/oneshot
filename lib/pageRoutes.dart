@@ -5,23 +5,22 @@ import 'package:oneshot/postProductionExpenses.dart';
 import 'package:oneshot/productionExpenses.dart';
 import 'package:oneshot/settings.dart';
 import 'aboveTheLine.dart';
-import 'classes/Budget.dart';
+import 'classes/BudgetDetails.dart';
 import 'main.dart';
 import 'newAboveTheLine.dart';
 import 'newPostProduction.dart';
 import 'newProductionExpenses.dart';
-import 'newProject.dart';
+import 'viewProject.dart';
 import 'otherExpenses.dart';
 
-Route toAboveTheLine() {
+Route toAboveTheLine(AboveTheLine atl) {
   return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => AboveTheLine(),
+      pageBuilder: (context, animation, secondaryAnimation) => atl,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(-1, 0);
         var end = Offset.zero;
         var curve = Curves.easeInOut;
         var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
 
         return SlideTransition(
           position: tween.animate(animation),
@@ -31,15 +30,14 @@ Route toAboveTheLine() {
   );
 }
 
-Route toNewAboveTheLine(List<Budget> list) {
+Route toNewAboveTheLine(List<BudgetDetails> list, int index) {
   return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => NewAboveTheLine(list: list),
+      pageBuilder: (context, animation, secondaryAnimation) => NewAboveTheLine(list: list, projectIndex: index),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(0, 1);
         var end = Offset.zero;
         var curve = Curves.easeInOut;
         var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
 
         return SlideTransition(
           position: tween.animate(animation),
@@ -49,15 +47,14 @@ Route toNewAboveTheLine(List<Budget> list) {
   );
 }
 
-Route toProductionExpenses() {
+Route toProductionExpenses(ProductionExpenses pE) {
   return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => ProductionExpenses(),
+      pageBuilder: (context, animation, secondaryAnimation) => pE,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(1, 0);
         var end = Offset.zero;
         var curve = Curves.easeInOut;
         var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
 
         return SlideTransition(
           position: tween.animate(animation),
@@ -67,15 +64,14 @@ Route toProductionExpenses() {
   );
 }
 
-Route toNewProductionExpenses(List<List<Budget>> list) {
+Route toNewProductionExpenses(List<List<BudgetDetails>> list, int index) {
   return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => NewProductionExpenses(list: list),
+      pageBuilder: (context, animation, secondaryAnimation) => NewProductionExpenses(list: list, projectIndex: index),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(0, 1);
         var end = Offset.zero;
         var curve = Curves.easeInOut;
         var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
 
         return SlideTransition(
           position: tween.animate(animation),
@@ -85,15 +81,14 @@ Route toNewProductionExpenses(List<List<Budget>> list) {
   );
 }
 
-Route toPostProductionExpenses() {
+Route toPostProductionExpenses(PostProductionExpenses pPE) {
   return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => PostProductionExpenses(),
+      pageBuilder: (context, animation, secondaryAnimation) => pPE,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(1, 0);
         var end = Offset.zero;
         var curve = Curves.easeInOut;
         var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
 
         return SlideTransition(
           position: tween.animate(animation),
@@ -103,15 +98,14 @@ Route toPostProductionExpenses() {
   );
 }
 
-Route toNewPostProductionExpenses(List<Budget> list) {
+Route toNewPostProductionExpenses(List<BudgetDetails> list, int index) {
   return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => NewPostProduction(list: list),
+      pageBuilder: (context, animation, secondaryAnimation) => NewPostProduction(list: list, projectIndex: index),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(0, 1);
         var end = Offset.zero;
         var curve = Curves.easeInOut;
         var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
 
         return SlideTransition(
           position: tween.animate(animation),
@@ -121,15 +115,14 @@ Route toNewPostProductionExpenses(List<Budget> list) {
   );
 }
 
-Route toOtherExpenses() {
+Route toOtherExpenses(OtherExpenses oE) {
   return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => OtherExpenses(),
+      pageBuilder: (context, animation, secondaryAnimation) => oE,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(1, 0);
         var end = Offset.zero;
         var curve = Curves.easeInOut;
         var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
 
         return SlideTransition(
           position: tween.animate(animation),
@@ -139,15 +132,14 @@ Route toOtherExpenses() {
   );
 }
 
-Route toNewOtherExpenses(List<Budget> list) {
+Route toNewOtherExpenses(List<BudgetDetails> list, int index) {
   return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => NewOtherExpenses(list: list),
+      pageBuilder: (context, animation, secondaryAnimation) => NewOtherExpenses(list: list, projectIndex: index),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(0, 1);
         var end = Offset.zero;
         var curve = Curves.easeInOut;
         var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var secondTween = Tween(begin: end, end: begin).chain(CurveTween(curve: Curves.easeOut));
 
         return SlideTransition(
           position: tween.animate(animation),
@@ -195,15 +187,14 @@ Route toSettings() {
   );
 }
 
-Route createProject() {
+Route toViewProject(int index) {
   return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => NewProject(),
+      pageBuilder: (context, animation, secondaryAnimation) => ViewProject(index: index),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(1, 0);
         var end = Offset.zero;
         var curve = Curves.easeInOut;
         var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var secondTween = Tween(begin: end, end:begin).chain(CurveTween(curve: Curves.easeInCubic));
 
         return SlideTransition(
           position: tween.animate(animation),

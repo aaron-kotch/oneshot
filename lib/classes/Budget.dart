@@ -1,13 +1,15 @@
+import 'package:oneshot/aboveTheLine.dart';
+import 'package:oneshot/otherExpenses.dart';
+import 'package:oneshot/postProductionExpenses.dart';
+import 'package:oneshot/productionExpenses.dart';
+
 class Budget {
 
-  final String title;
-  String totalPayee;
-  String totalAmount;
+  const Budget(this.aboveTheLine, this.productionExpenses, this.postProductionExpenses, this.otherExpenses);
 
-  Budget({required this.title, this.totalPayee = "0", this.totalAmount = "0"});
-
-  void setPayee(String payee) {
-    this.totalPayee = payee;
-  }
+  final AboveTheLine aboveTheLine;
+  final ProductionExpenses productionExpenses;
+  final PostProductionExpenses postProductionExpenses;
+  final OtherExpenses otherExpenses;
 
 }

@@ -2,14 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oneshot/aboveTheLine.dart';
-import 'package:oneshot/classes/Budget.dart';
+import 'package:oneshot/classes/BudgetDetails.dart';
 import 'package:oneshot/projectBottomSheet.dart';
 import 'package:oneshot/newSubBudgetTile.dart';
 
 class NewPostProduction extends StatefulWidget {
-  const NewPostProduction({Key? key, required this.list}) : super(key: key);
+  const NewPostProduction({Key? key, required this.list, required this.projectIndex}) : super(key: key);
 
   final list;
+  final int projectIndex;
 
   @override
   _NewPostProductionState createState() => _NewPostProductionState();
@@ -100,7 +101,7 @@ class _NewPostProductionState extends State<NewPostProduction> {
                               backgroundColor: Color(0xff131212),
                               context: context,
                               builder: (context) {
-                                return ProjectBottomSheet();
+                                return ProjectBottomSheet(index: widget.projectIndex);
                               });
                         },
                       )

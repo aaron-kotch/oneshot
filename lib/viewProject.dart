@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oneshot/aboveTheLine.dart';
 import 'package:oneshot/budgetTypesTile.dart';
-import 'package:oneshot/classes/Budget.dart';
 import 'package:oneshot/classes/Projects.dart';
 import 'package:oneshot/main.dart';
 import 'package:oneshot/pageRoutes.dart';
@@ -13,21 +12,25 @@ import 'package:oneshot/projectBottomSheet.dart';
 
 import 'otherExpenses.dart';
 
-class NewProject extends StatefulWidget {
-  const NewProject({Key? key}) : super(key: key);
+class ViewProject extends StatefulWidget {
+  const ViewProject({Key? key, required this.index}) : super(key: key);
+
+  final index;
 
   @override
-  _NewProjectState createState() => _NewProjectState();
+  _ViewProjectState createState() => _ViewProjectState();
 }
 
-class _NewProjectState extends State<NewProject> with SingleTickerProviderStateMixin {
+class _ViewProjectState extends State<ViewProject> with SingleTickerProviderStateMixin {
 
   var _tabController;
 
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  late Projects project;
 
-  int projectCount = MyHomePage.projectList.length + 1;
-  int projectIndex = MyHomePage.projectList.length;
+  late AboveTheLine aboveTheLine;
+  late ProductionExpenses productionExpenses;
+  late PostProductionExpenses postProductionExpenses;
+  late OtherExpenses otherExpenses;
 
   TextEditingController _companyTC = new TextEditingController();
   TextEditingController _titleTC = new TextEditingController();
@@ -38,25 +41,20 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
   TextEditingController _unionTC = new TextEditingController();
   TextEditingController _locationTC = new TextEditingController();
 
-  late AboveTheLine _atl;
-  late ProductionExpenses _pE;
-  late PostProductionExpenses _pPE;
-  late OtherExpenses _oE;
-
   Map<String, int> budgetAmount = {'Above The Line': 0, 'Production': 0, 'Post Production': 0, 'Other': 0, 'Total': 0};
-
-  bool _isSnackbarActive = false;
 
   @override
   void initState() {
     super.initState();
-
-    _atl = new AboveTheLine(projectIndex: projectIndex);
-    _pE = new ProductionExpenses(projectIndex: projectIndex);
-    _pPE = new PostProductionExpenses(projectIndex: projectIndex);
-    _oE = new OtherExpenses(projectIndex: projectIndex);
-
     _tabController = new TabController(length: 2, vsync: this);
+
+    project = MyHomePage.projectList[widget.index][0];
+
+    aboveTheLine = MyHomePage.projectList[widget.index][1].aboveTheLine;
+    productionExpenses = MyHomePage.projectList[widget.index][1].productionExpenses;
+    postProductionExpenses = MyHomePage.projectList[widget.index][1].postProductionExpenses;
+    otherExpenses = MyHomePage.projectList[widget.index][1].otherExpenses;
+
     _tabController.addListener(() {});
   }
 
@@ -104,57 +102,12 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                               color: Colors.white,
                             ),
                             onPressed: () {
-                              try {
-                                saveProject();
-                                Navigator.pop(context);
-                              } catch (e) {
-                                
-                                if (_isSnackbarActive) {
-                                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                }
-                                
-                                _isSnackbarActive = true;
-                                
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      duration: Duration(seconds: 1),
-                                      padding: EdgeInsets.only(bottom: 4, left: 28),
-                                      backgroundColor: Color(0xff171717),
-                                      content: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(right: 16),
-                                            child: Icon(
-                                              Icons.warning_rounded,
-                                              size: 20,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          Text(
-                                            "Please fill in all details.",
-                                            style: TextStyle(
-                                                fontFamily: 'Calibri',
-                                                fontWeight: FontWeight.w300,
-                                                fontSize: 16,
-                                                color: Colors.white,
-                                                height: 1.6
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                ).closed.then((value) => _isSnackbarActive = false);
-
-                              }
+                              Navigator.pop(context);
                             },
                           ),
                           Container(
                             child: Text(
-                              MyHomePage.projectList.isNotEmpty
-                              ? 'Project ${int.parse(MyHomePage.projectList[MyHomePage.projectList.length - 1][0].projectName.toString().split(" ")[1]) + 1}'
-                              : "Project 1",
+                              project.projectName,
                               style: TextStyle(
                                 fontFamily: 'Calibri',
                                 fontWeight: FontWeight.w300,
@@ -171,11 +124,11 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                             ),
                             onPressed: () {
                               showModalBottomSheet(
-                                  backgroundColor: Color(0xff131212),
-                                  context: context,
-                                  builder: (context) {
-                                    return ProjectBottomSheet(index: projectIndex);
-                                  });
+                                backgroundColor: Color(0xff131212),
+                                context: context,
+                                builder: (context) {
+                                  return ProjectBottomSheet(index: widget.index);
+                              });
                             },
                           )
                         ],
@@ -239,7 +192,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                             color: Colors.grey[300],
                                           ),
                                           decoration: InputDecoration(
-                                            hintText: "Tap to add company name",
+                                            hintText: project.company.toString(),
                                             hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
@@ -282,7 +235,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                             color: Colors.grey[300],
                                           ),
                                           decoration: InputDecoration(
-                                            hintText: "Tap to add project title",
+                                            hintText: project.title.toString(),
                                             hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
@@ -325,7 +278,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                             color: Colors.grey[300],
                                           ),
                                           decoration: InputDecoration(
-                                            hintText: "Tap to add the name",
+                                            hintText: project.prepareBy.toString(),
                                             hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
@@ -368,7 +321,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                             color: Colors.grey[300],
                                           ),
                                           decoration: InputDecoration(
-                                            hintText: "01/01/2017",
+                                            hintText: project.budgetDate.toString(),
                                             hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
@@ -412,7 +365,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                             color: Colors.grey[300],
                                           ),
                                           decoration: InputDecoration(
-                                            hintText: "Tap to add the number of shoot days",
+                                            hintText: project.shootDays.toString(),
                                             hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
@@ -455,7 +408,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                             color: Colors.grey[300],
                                           ),
                                           decoration: InputDecoration(
-                                            hintText: "Tap to add producers name",
+                                            hintText: project.producers.toString(),
                                             hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
@@ -498,7 +451,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                             color: Colors.grey[300],
                                           ),
                                           decoration: InputDecoration(
-                                            hintText: "Tap to choose yes or no",
+                                            hintText: project.union.toString(),
                                             hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
@@ -541,7 +494,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                             color: Colors.grey[300],
                                           ),
                                           decoration: InputDecoration(
-                                            hintText: "Tap to add location name",
+                                            hintText: project.location.toString(),
                                             hintStyle: TextStyle(
                                               fontFamily: "SegoeUI",
                                               fontSize: 16,
@@ -561,9 +514,9 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                             ),
                           ),
                           Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Expanded(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
                                   child: ListView(
                                     shrinkWrap: true,
                                     children: <Widget>[
@@ -572,7 +525,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                         value: "\$ ${budget()["Above The Line"]![0]}",
                                         count: "${budget()["Above The Line"]![1]}",
                                         onPressed: () {
-                                          Navigator.of(context).push(toAboveTheLine(_atl)).then((value) {
+                                          Navigator.of(context).push(toAboveTheLine(aboveTheLine)).then((value) {
                                             setState(() {
 
                                             });
@@ -584,7 +537,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                         value: "\$ ${budget()["Production"]![0]}",
                                         count: "${budget()["Production"]![1]}",
                                         onPressed: () {
-                                          Navigator.of(context).push(toProductionExpenses(_pE)).then((value) {
+                                          Navigator.of(context).push(toProductionExpenses(productionExpenses)).then((value) {
                                             setState(() {
 
                                             });
@@ -596,7 +549,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                         value: "\$ ${budget()["Post Production"]![0]}",
                                         count: "${budget()["Post Production"]![1]}",
                                         onPressed: () {
-                                          Navigator.of(context).push(toPostProductionExpenses(_pPE)).then((value) {
+                                          Navigator.of(context).push(toPostProductionExpenses(postProductionExpenses)).then((value) {
                                             setState(() {
 
                                             });
@@ -608,7 +561,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                         value: "\$ ${budget()["Other"]![0]}",
                                         count: "${budget()["Other"]![1]}",
                                         onPressed: () {
-                                          Navigator.of(context).push(toOtherExpenses(_oE)).then((value) {
+                                          Navigator.of(context).push(toOtherExpenses(otherExpenses)).then((value) {
                                             setState(() {
 
                                             });
@@ -704,32 +657,32 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                       ), // total
                                     ],
                                   ),
-                                ),
-                                Container(
-                                  height: 72,
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 76),
-                                  color: Color(0xff171717),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.search,
-                                        size: 25,
-                                        color: Colors.white,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          ImageIcon(
-                                            AssetImage("assets/icons/dollar.png"),
-                                            size: 15,
-                                            color: Colors.white,
-                                          ),
-                                          Padding(
+                              ),
+                              Container(
+                                height: 72,
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 76),
+                                color: Color(0xff171717),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.search,
+                                      size: 25,
+                                      color: Colors.white,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        ImageIcon(
+                                          AssetImage("assets/icons/dollar.png"),
+                                          size: 15,
+                                          color: Colors.white,
+                                        ),
+                                        Padding(
                                             padding: const EdgeInsets.only(left: 12),
                                             child: Text(
                                               "Total Amount",
@@ -740,23 +693,23 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                                 color: Color(0xff999999),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      IconButton(
-                                          onPressed: () {
-                                            //Navigator.of(context).push(toNewAboveTheLine());
-                                          },
-                                          icon: Icon(
-                                            Icons.add_circle,
-                                            color: textColor,
-                                            size: 30,
-                                          )
-                                      )
-                                    ],
-                                  ),
+                                        ),
+                                      ],
+                                    ),
+                                    IconButton(
+                                        onPressed: () {
+                                          //Navigator.of(context).push(toNewAboveTheLine());
+                                        },
+                                        icon: Icon(
+                                          Icons.add_circle,
+                                          color: textColor,
+                                          size: 30,
+                                        )
+                                    )
+                                  ],
                                 ),
-                              ]
+                              ),
+                            ]
                           ),
                         ]
                     ),
@@ -769,16 +722,6 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
     );
   }
 
-  void saveProject() {
-    Projects projects = new Projects("Project $projectCount", _companyTC.text, _titleTC.text, _prepareTC.text, _dateTC.text, int.parse(_daysTC.text), _producersTC.text, _unionTC.text, _locationTC.text);
-    Budget budgets = new Budget(_atl, _pE, _pPE, _oE);
-
-
-    setState(() {
-      MyHomePage.projectList.add([projects, budgets]);
-    });
-  }
-
   Map<String, List<int>> budget() {
     Map<String, List<int>> budgetAmount = {'Above The Line': [0, 0], 'Production': [0, 0], 'Post Production': [0, 0], 'Other': [0, 0], 'Total': [0, 0]};
 
@@ -788,24 +731,24 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
     int oAmount = 0, oPayee = 0;
     int totalAmount = 0, totalPayee = 0;
 
-    for (var i in _atl.list) {
+    for (var i in aboveTheLine.list) {
       atlAmount = atlAmount + int.parse(i.totalAmount);
       atlPayee = atlPayee + int.parse(i.totalPayee);
     }
 
-    for (var i in _pE.productionBudgetList) {
+    for (var i in productionExpenses.productionBudgetList) {
       for (var x in i) {
         pAmount = pAmount + int.parse(x.totalAmount);
         pPayee = pPayee + int.parse(x.totalPayee);
       }
     }
 
-    for (var i in _pPE.postProductionList) {
+    for (var i in postProductionExpenses.postProductionList) {
       pPAmount = pPAmount + int.parse(i.totalAmount);
       pPPayee = pPPayee + int.parse(i.totalPayee);
     }
 
-    for (var i in _oE.otherList) {
+    for (var i in otherExpenses.otherList) {
       oAmount = oAmount + int.parse(i.totalAmount);
       oPayee = oPayee + int.parse(i.totalPayee);
     }

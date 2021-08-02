@@ -1,22 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oneshot/classes/Budget.dart';
+import 'package:oneshot/classes/BudgetDetails.dart';
 import 'package:oneshot/pageRoutes.dart';
 import 'package:oneshot/projectBottomSheet.dart';
 import 'package:oneshot/subBudgetTile.dart';
 
 class AboveTheLine extends StatefulWidget {
 
-  const AboveTheLine({Key? key}) : super(key: key);
+  AboveTheLine({Key? key, required this.projectIndex}) : super(key: key);
 
-  static List<Budget> list = [
-    new Budget(title: "Development Rights"),
-    new Budget(title: "Story & Rights"),
-    new Budget(title: "Director & Staff"),
-    new Budget(title: "Cast"),
-    new Budget(title: "Travel & Living"),
+  final projectIndex;
+
+  List<BudgetDetails> list = [
+    new BudgetDetails(title: "Development Rights"),
+    new BudgetDetails(title: "Story & Rights"),
+    new BudgetDetails(title: "Director & Staff"),
+    new BudgetDetails(title: "Cast"),
+    new BudgetDetails(title: "Travel & Living"),
   ];
+
+  List<BudgetDetails> get itemList => itemList;
 
   @override
   _AboveTheLineState createState() => _AboveTheLineState();
@@ -47,8 +51,8 @@ class _AboveTheLineState extends State<AboveTheLine> {
         systemNavigationBarIconBrightness: Brightness.light
     ));
 
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     return SafeArea(
       child: Scaffold(
@@ -97,7 +101,7 @@ class _AboveTheLineState extends State<AboveTheLine> {
                               backgroundColor: Color(0xff131212),
                               context: context,
                               builder: (context) {
-                                return ProjectBottomSheet();
+                                return ProjectBottomSheet(index: widget.projectIndex);
                               });
                         },
                       )
@@ -107,13 +111,13 @@ class _AboveTheLineState extends State<AboveTheLine> {
               ), // top
               Expanded(
                 child: ListView.builder(
-                  itemCount: AboveTheLine.list.length,
+                  itemCount: widget.list.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return SubBudgetTile(
-                      title: AboveTheLine.list[index].title,
-                      payee: AboveTheLine.list[index].totalPayee == "0" ? "-" : AboveTheLine.list[index].totalPayee,
-                      amount: AboveTheLine.list[index].totalAmount == "0" ? "-" : AboveTheLine.list[index].totalAmount,
+                      title: widget.list[index].title,
+                      payee: widget.list[index].totalPayee == "0" ? "-" : widget.list[index].totalPayee,
+                      amount: widget.list[index].totalAmount == "0" ? "-" : widget.list[index].totalAmount,
                     );
                   }
                 )
@@ -158,7 +162,7 @@ class _AboveTheLineState extends State<AboveTheLine> {
                     ),
                     IconButton(
                       onPressed: () {
-                        Navigator.of(context).push(toNewAboveTheLine(AboveTheLine.list));
+                        Navigator.of(context).push(toNewAboveTheLine(widget.list, widget.projectIndex));
                       },
                       icon: Icon(
                         Icons.add_circle,
@@ -178,7 +182,7 @@ class _AboveTheLineState extends State<AboveTheLine> {
 
   int totalValue() {
     int total = 0;
-    for (var i in AboveTheLine.list) {
+    for (var i in widget.list) {
       total = total + int.parse(i.totalAmount);
     }
     return total;

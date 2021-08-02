@@ -6,39 +6,43 @@ import 'package:oneshot/pageRoutes.dart';
 import 'package:oneshot/projectBottomSheet.dart';
 import 'package:oneshot/subBudgetTile.dart';
 
-import 'classes/Budget.dart';
+import 'classes/BudgetDetails.dart';
 
 class ProductionExpenses extends StatefulWidget {
-  const ProductionExpenses({Key? key}) : super(key: key);
+  ProductionExpenses({Key? key, required this.projectIndex}) : super(key: key);
 
-  static List<List<Budget>> productionBudgetList = [
+  final int projectIndex;
+
+  List<List<BudgetDetails>> productionBudgetList = [
     [
-      new Budget(title: "Production Staff"),
-      new Budget(title: "Extra Talent"),
-      new Budget(title: "Set Construction"),
-      new Budget(title: "Set Design"),
-      new Budget(title: "Set Pre-Rig & Strike"),
-      new Budget(title: "Set Operations"),
-      new Budget(title: "Set Dressing"),
+      new BudgetDetails(title: "Production Staff"),
+      new BudgetDetails(title: "Extra Talent"),
+      new BudgetDetails(title: "Set Construction"),
+      new BudgetDetails(title: "Set Design"),
+      new BudgetDetails(title: "Set Pre-Rig & Strike"),
+      new BudgetDetails(title: "Set Operations"),
+      new BudgetDetails(title: "Set Dressing"),
     ],
     [
-      new Budget(title: "Property"),
-      new Budget(title: "Wardrobe"),
-      new Budget(title: "Electric"),
-      new Budget(title: "Camera"),
-      new Budget(title: "Production Sound"),
-      new Budget(title: "Make-up & hair"),
-      new Budget(title: "Transportation"),
+      new BudgetDetails(title: "Property"),
+      new BudgetDetails(title: "Wardrobe"),
+      new BudgetDetails(title: "Electric"),
+      new BudgetDetails(title: "Camera"),
+      new BudgetDetails(title: "Production Sound"),
+      new BudgetDetails(title: "Make-up & hair"),
+      new BudgetDetails(title: "Transportation"),
     ],
     [
-      new Budget(title: "Locations"),
-      new Budget(title: "Picture Vehicles & Animals"),
-      new Budget(title: "Special Effects"),
-      new Budget(title: "Visual Effects - Post"),
-      new Budget(title: "Film & Lab"),
-      new Budget(title: "BTL Travel"),
+      new BudgetDetails(title: "Locations"),
+      new BudgetDetails(title: "Picture Vehicles & Animals"),
+      new BudgetDetails(title: "Special Effects"),
+      new BudgetDetails(title: "Visual Effects - Post"),
+      new BudgetDetails(title: "Film & Lab"),
+      new BudgetDetails(title: "BTL Travel"),
     ]
   ];
+
+  List<List<BudgetDetails>> get itemList => productionBudgetList;
 
   @override
   _ProductionExpensesState createState() => _ProductionExpensesState();
@@ -211,7 +215,7 @@ class _ProductionExpensesState extends State<ProductionExpenses> {
                               backgroundColor: Color(0xff131212),
                               context: context,
                               builder: (context) {
-                                return ProjectBottomSheet();
+                                return ProjectBottomSheet(index: widget.projectIndex);
                               });
                         },
                       )
@@ -228,13 +232,13 @@ class _ProductionExpensesState extends State<ProductionExpenses> {
                         Container(
                           child: ListView.builder(
                             padding: EdgeInsets.only(bottom: 60),
-                            itemCount: ProductionExpenses.productionBudgetList[0].length,
+                            itemCount: widget.productionBudgetList[0].length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
                               return SubBudgetTile(
-                                title: ProductionExpenses.productionBudgetList[0][index].title,
-                                payee: ProductionExpenses.productionBudgetList[0][index].totalPayee == "0" ? "-" : ProductionExpenses.productionBudgetList[0][index].totalPayee,
-                                amount: ProductionExpenses.productionBudgetList[0][index].totalAmount == "0" ? "-" : ProductionExpenses.productionBudgetList[0][index].totalAmount,
+                                title: widget.productionBudgetList[0][index].title,
+                                payee: widget.productionBudgetList[0][index].totalPayee == "0" ? "-" : widget.productionBudgetList[0][index].totalPayee,
+                                amount: widget.productionBudgetList[0][index].totalAmount == "0" ? "-" : widget.productionBudgetList[0][index].totalAmount,
                               );
                             },
                           ),
@@ -242,13 +246,13 @@ class _ProductionExpensesState extends State<ProductionExpenses> {
                         Container(
                           child: ListView.builder(
                             padding: EdgeInsets.only(bottom: 60),
-                            itemCount: ProductionExpenses.productionBudgetList[1].length,
+                            itemCount: widget.productionBudgetList[1].length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
                               return SubBudgetTile(
-                                title: ProductionExpenses.productionBudgetList[1][index].title,
-                                payee: ProductionExpenses.productionBudgetList[1][index].totalPayee == "0" ? "-" : ProductionExpenses.productionBudgetList[1][index].totalPayee,
-                                amount: ProductionExpenses.productionBudgetList[1][index].totalAmount == "0" ? "-" : ProductionExpenses.productionBudgetList[1][index].totalAmount,
+                                title: widget.productionBudgetList[1][index].title,
+                                payee: widget.productionBudgetList[1][index].totalPayee == "0" ? "-" : widget.productionBudgetList[1][index].totalPayee,
+                                amount: widget.productionBudgetList[1][index].totalAmount == "0" ? "-" : widget.productionBudgetList[1][index].totalAmount,
                               );
                             },
                           ),
@@ -257,13 +261,13 @@ class _ProductionExpensesState extends State<ProductionExpenses> {
                           children: [
                             ListView.builder(
                               padding: EdgeInsets.only(bottom: 100),
-                              itemCount: ProductionExpenses.productionBudgetList[2].length,
+                              itemCount: widget.productionBudgetList[2].length,
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 return SubBudgetTile(
-                                  title: ProductionExpenses.productionBudgetList[2][index].title,
-                                  payee: ProductionExpenses.productionBudgetList[2][index].totalPayee == "0" ? "-" : ProductionExpenses.productionBudgetList[2][index].totalPayee,
-                                  amount: ProductionExpenses.productionBudgetList[2][index].totalAmount == "0" ? "-" : ProductionExpenses.productionBudgetList[2][index].totalAmount,
+                                  title: widget.productionBudgetList[2][index].title,
+                                  payee: widget.productionBudgetList[2][index].totalPayee == "0" ? "-" : widget.productionBudgetList[2][index].totalPayee,
+                                  amount: widget.productionBudgetList[2][index].totalAmount == "0" ? "-" : widget.productionBudgetList[2][index].totalAmount,
                                 );
                               },
                             ),
@@ -310,7 +314,7 @@ class _ProductionExpensesState extends State<ProductionExpenses> {
                                     ),
                                     IconButton(
                                         onPressed: () {
-                                          Navigator.of(context).push(toNewProductionExpenses(ProductionExpenses.productionBudgetList));
+                                          Navigator.of(context).push(toNewProductionExpenses(widget.productionBudgetList, widget.projectIndex));
                                         },
                                         icon: Icon(
                                           Icons.add_circle,
@@ -346,7 +350,7 @@ class _ProductionExpensesState extends State<ProductionExpenses> {
 
   int totalValue() {
     int total = 0;
-    for (var i in ProductionExpenses.productionBudgetList) {
+    for (var i in widget.productionBudgetList) {
       for (var x in i) {
         total = total +  int.parse(x.totalAmount);
       }
