@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:oneshot/newOtherExpenses.dart';
-
-import 'package:oneshot/postProductionExpenses.dart';
-import 'package:oneshot/productionExpenses.dart';
-import 'package:oneshot/settings.dart';
-import 'aboveTheLine.dart';
+import 'package:oneshot/create_pages/newOtherExpenses.dart';
+import 'package:oneshot/view_pages/postProductionExpenses.dart';
+import 'package:oneshot/view_pages/productionExpenses.dart';
+import 'package:oneshot/view_pages/settings.dart';
+import 'view_pages/aboveTheLine.dart';
 import 'classes/BudgetDetails.dart';
 import 'main.dart';
-import 'newAboveTheLine.dart';
-import 'newPostProduction.dart';
-import 'newProductionExpenses.dart';
-import 'viewProject.dart';
-import 'otherExpenses.dart';
+import 'create_pages/newAboveTheLine.dart';
+import 'create_pages/newPostProduction.dart';
+import 'create_pages/newProductionExpenses.dart';
+import 'view_pages/viewProject.dart';
+import 'view_pages/otherExpenses.dart';
+
+// page routes functions
 
 Route toAboveTheLine(AboveTheLine atl) {
   return PageRouteBuilder(

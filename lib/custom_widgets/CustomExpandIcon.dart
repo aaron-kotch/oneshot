@@ -7,6 +7,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+// custom icon widget to include slide transition for leading and trailing icons of the expandable app bar
+
 class CustomExpandIcon extends StatefulWidget {
   /// Creates an [CustomExpandIcon] with the given padding, and a callback that is
   /// triggered when the icon is pressed.
@@ -22,10 +24,7 @@ class CustomExpandIcon extends StatefulWidget {
     this.color,
     this.disabledColor,
     this.expandedColor,
-  }) : assert(isExpanded != null),
-        assert(size != null),
-        assert(padding != null),
-        super(key: key);
+  });
 
   /// Whether the icon is in an expanded state.
   ///
@@ -64,7 +63,7 @@ class _CustomExpandIconState extends State<CustomExpandIcon> with SingleTickerPr
     _controller = AnimationController(duration: kThemeAnimationDuration, vsync: this);
     _iconTurns = _controller.drive(_iconTurnTween);
     _iconSlides = _controller.drive(_iconSlideTween);
-    // If the widget is initially expanded, rotate the icon without animating it.
+
     if (widget.isExpanded) {
       _controller.value = math.pi;
     }
@@ -91,25 +90,8 @@ class _CustomExpandIconState extends State<CustomExpandIcon> with SingleTickerPr
   void _handlePressed() {
     widget.onPressed?.call(widget.isExpanded);
   }
-
-  Color get _iconColor {
-    if (widget.isExpanded && widget.expandedColor != null) {
-      return widget.expandedColor!;
-    }
-
-    if (widget.color != null) {
-      return widget.color!;
-    }
-
-    switch(Theme.of(context).brightness) {
-      case Brightness.light:
-        return Colors.black54;
-      case Brightness.dark:
-        return Colors.white60;
-    }
-  }
-
   @override
+
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterial(context));
     assert(debugCheckHasMaterialLocalizations(context));

@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oneshot/aboveTheLine.dart';
-import 'package:oneshot/budgetTypesTile.dart';
+import 'package:intl/intl.dart';
+import 'package:oneshot/view_pages/aboveTheLine.dart';
+import 'package:oneshot/tiles/budgetTypesTile.dart';
 import 'package:oneshot/classes/Budget.dart';
 import 'package:oneshot/classes/Projects.dart';
 import 'package:oneshot/main.dart';
 import 'package:oneshot/pageRoutes.dart';
-import 'package:oneshot/postProductionExpenses.dart';
-import 'package:oneshot/productionExpenses.dart';
-import 'package:oneshot/projectBottomSheet.dart';
+import 'package:oneshot/view_pages/postProductionExpenses.dart';
+import 'package:oneshot/view_pages/productionExpenses.dart';
+import 'package:oneshot/custom_widgets/projectBottomSheet.dart';
 
-import 'otherExpenses.dart';
+import '../view_pages/otherExpenses.dart';
 
 class NewProject extends StatefulWidget {
   const NewProject({Key? key}) : super(key: key);
@@ -22,30 +23,38 @@ class NewProject extends StatefulWidget {
 
 class _NewProjectState extends State<NewProject> with SingleTickerProviderStateMixin {
 
-  var _tabController;
+  late final TabController _tabController;
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  int projectCount = MyHomePage.projectList.length + 1;
-  int projectIndex = MyHomePage.projectList.length;
+  final int projectCount = MyHomePage.projectList.length + 1;
+  final int projectIndex = MyHomePage.projectList.length;
 
   TextEditingController _companyTC = new TextEditingController();
   TextEditingController _titleTC = new TextEditingController();
   TextEditingController _prepareTC = new TextEditingController();
-  TextEditingController _dateTC = new TextEditingController();
   TextEditingController _daysTC = new TextEditingController();
   TextEditingController _producersTC = new TextEditingController();
   TextEditingController _unionTC = new TextEditingController();
   TextEditingController _locationTC = new TextEditingController();
 
-  late AboveTheLine _atl;
-  late ProductionExpenses _pE;
-  late PostProductionExpenses _pPE;
-  late OtherExpenses _oE;
+  late final AboveTheLine _atl;
+  late final ProductionExpenses _pE;
+  late final PostProductionExpenses _pPE;
+  late final OtherExpenses _oE;
+
+  DateTime selectedDate = DateTime.now();
+
+  final Color textColor = const Color(0xffD2480A);
+  final Color subTextColor = const Color(0xff999999);
+  final Color borderColor = const Color(0xff0E0E0E);
+  final Color backgroundColor = const Color(0xff1E1E1E);
 
   Map<String, int> budgetAmount = {'Above The Line': 0, 'Production': 0, 'Post Production': 0, 'Other': 0, 'Total': 0};
 
   bool _isSnackbarActive = false;
+
+  late final int currentProjectNum;
 
   @override
   void initState() {
@@ -58,17 +67,23 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
 
     _tabController = new TabController(length: 2, vsync: this);
     _tabController.addListener(() {});
+
+    if (MyHomePage.projectList.isNotEmpty) {
+      currentProjectNum = int.parse(MyHomePage.projectList[MyHomePage.projectList.length - 1][0].projectName.toString().split(" ")[1]) + 1;
+    } else {
+      currentProjectNum = 1;
+    }
+
+    setState(() {
+
+    });
   }
 
   @override
   Widget build(BuildContext context) {
 
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-
-    Color textColor = Color(0xffD2480A);
-    Color subTextColor = Color(0xff999999);
-    Color borderColor = Color(0xff0E0E0E);
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         systemNavigationBarColor: Color(0xff171717),
@@ -77,7 +92,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
 
     return SafeArea(
         child: Scaffold(
-          backgroundColor: Color(0xff1E1E1E),
+          backgroundColor: backgroundColor,
           body: GestureDetector(
             onTap: () {
               FocusScope.of(context).requestFocus(new FocusNode());
@@ -110,11 +125,11 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                               } catch (e) {
                                 
                                 if (_isSnackbarActive) {
+                                  _isSnackbarActive = false;
                                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                                 }
-                                
                                 _isSnackbarActive = true;
-                                
+
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       duration: Duration(seconds: 1),
@@ -144,8 +159,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                                           ),
                                         ],
                                       ),
-                                    )
-                                ).closed.then((value) => _isSnackbarActive = false);
+                                    )).closed.then((value) => _isSnackbarActive = false);
 
                               }
                             },
@@ -153,7 +167,7 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                           Container(
                             child: Text(
                               MyHomePage.projectList.isNotEmpty
-                              ? 'Project ${int.parse(MyHomePage.projectList[MyHomePage.projectList.length - 1][0].projectName.toString().split(" ")[1]) + 1}'
+                              ? 'Project $currentProjectNum'
                               : "Project 1",
                               style: TextStyle(
                                 fontFamily: 'Calibri',
@@ -208,357 +222,346 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
                     child: TabBarView(
                         controller: _tabController,
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 24, left: 24, right: 24),
-                            child: ListView(
-                              children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.only(top: 8, bottom: 8),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        "Production Company",
-                                        style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w400,
-                                          color: textColor,
-                                        ),
+                          ListView(
+                            padding: const EdgeInsets.only(top: 24),
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.only(top: 8, bottom: 8, left: 24, right: 24),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      "Production Company",
+                                      style: TextStyle(
+                                        fontFamily: "Inter",
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                        color: textColor,
                                       ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 4),
-                                        height: 32,
-                                        child: TextField(
-                                          controller: _companyTC,
-                                          style: TextStyle(
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(top: 4),
+                                      height: 32,
+                                      child: TextField(
+                                        controller: _companyTC,
+                                        style: TextStyle(
+                                          fontFamily: "SegoeUI",
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey[300],
+                                        ),
+                                        decoration: InputDecoration(
+                                          hintText: "Tap to add company name",
+                                          hintStyle: TextStyle(
                                             fontFamily: "SegoeUI",
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: Colors.grey[300],
+                                            color: subTextColor,
                                           ),
-                                          decoration: InputDecoration(
-                                            hintText: "Tap to add company name",
-                                            hintStyle: TextStyle(
-                                              fontFamily: "SegoeUI",
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              color: subTextColor,
-                                            ),
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                          ),
-                                          textAlign: TextAlign.left,
+                                          enabledBorder: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
                                         ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                    ],
-                                  ),
-                                ), // company
-                                Container(
-                                  padding: EdgeInsets.only(top: 8, bottom: 8),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        "Project Title",
+                                    ),
+                                  ],
+                                ),
+                              ), // company
+                              Container(
+                                padding: EdgeInsets.only(top: 8, bottom: 8, left: 24, right: 24),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      "Project Title",
+                                      style: TextStyle(
+                                        fontFamily: "Inter",
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                        color: textColor,
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(top: 4),
+                                      height: 32,
+                                      child: TextField(
+                                        controller: _titleTC,
                                         style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontSize: 18,
+                                          fontFamily: "SegoeUI",
+                                          fontSize: 16,
                                           fontWeight: FontWeight.w400,
-                                          color: textColor,
+                                          color: Colors.grey[300],
                                         ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 4),
-                                        height: 32,
-                                        child: TextField(
-                                          controller: _titleTC,
-                                          style: TextStyle(
+                                        decoration: InputDecoration(
+                                          hintText: "Tap to add project title",
+                                          hintStyle: TextStyle(
                                             fontFamily: "SegoeUI",
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: Colors.grey[300],
+                                            color: subTextColor,
                                           ),
-                                          decoration: InputDecoration(
-                                            hintText: "Tap to add project title",
-                                            hintStyle: TextStyle(
-                                              fontFamily: "SegoeUI",
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              color: subTextColor,
-                                            ),
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                          ),
-                                          textAlign: TextAlign.left,
+                                          enabledBorder: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
                                         ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                    ],
-                                  ),
-                                ), // title
-                                Container(
-                                  padding: EdgeInsets.only(top: 8, bottom: 8),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        "Prepare By",
+                                    ),
+                                  ],
+                                ),
+                              ), // title
+                              Container(
+                                padding: EdgeInsets.only(top: 8, bottom: 8, left: 24, right: 24),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      "Prepare By",
+                                      style: TextStyle(
+                                        fontFamily: "Inter",
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                        color: textColor,
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(top: 4),
+                                      height: 32,
+                                      child: TextField(
+                                        controller: _prepareTC,
                                         style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontSize: 18,
+                                          fontFamily: "SegoeUI",
+                                          fontSize: 16,
                                           fontWeight: FontWeight.w400,
-                                          color: textColor,
+                                          color: Colors.grey[300],
                                         ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 4),
-                                        height: 32,
-                                        child: TextField(
-                                          controller: _prepareTC,
-                                          style: TextStyle(
+                                        decoration: InputDecoration(
+                                          hintText: "Tap to add the name",
+                                          hintStyle: TextStyle(
                                             fontFamily: "SegoeUI",
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: Colors.grey[300],
+                                            color: subTextColor,
                                           ),
-                                          decoration: InputDecoration(
-                                            hintText: "Tap to add the name",
-                                            hintStyle: TextStyle(
-                                              fontFamily: "SegoeUI",
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              color: subTextColor,
-                                            ),
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                          ),
-                                          textAlign: TextAlign.left,
+                                          enabledBorder: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
                                         ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                    ],
-                                  ),
-                                ), // prepare by
-                                Container(
-                                  padding: EdgeInsets.only(top: 8, bottom: 8),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        "Budget Dates",
+                                    ),
+                                  ],
+                                ),
+                              ), // prepare by
+                              ListTile(
+                                contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 24),
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      "Budget Dates",
+                                      style: TextStyle(
+                                        fontFamily: "Inter",
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                        color: textColor,
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(top: 4),
+                                      height: 32,
+                                      child: Text(
+                                        DateFormat('dd/MM/yy').format(selectedDate).toString(),
                                         style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontSize: 18,
+                                          fontFamily: "SegoeUI",
+                                          fontSize: 16,
                                           fontWeight: FontWeight.w400,
-                                          color: textColor,
+                                          color: subTextColor,
                                         ),
                                       ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 4),
-                                        height: 32,
-                                        child: TextField(
-                                          controller: _dateTC,
-                                          style: TextStyle(
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {
+                                  pickDate(context);
+                                },
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(top: 8, bottom: 8, left: 24, right: 24),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      "Shoot Days",
+                                      style: TextStyle(
+                                        fontFamily: "Inter",
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                        color: textColor,
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(top: 4),
+                                      height: 32,
+                                      child: TextField(
+                                        controller: _daysTC,
+                                        keyboardType: TextInputType.number,
+                                        style: TextStyle(
+                                          fontFamily: "SegoeUI",
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey[300],
+                                        ),
+                                        decoration: InputDecoration(
+                                          hintText: "Tap to add the number of shoot days",
+                                          hintStyle: TextStyle(
                                             fontFamily: "SegoeUI",
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: Colors.grey[300],
+                                            color: subTextColor,
                                           ),
-                                          decoration: InputDecoration(
-                                            hintText: "01/01/2017",
-                                            hintStyle: TextStyle(
-                                              fontFamily: "SegoeUI",
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              color: subTextColor,
-                                            ),
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                          ),
-                                          textAlign: TextAlign.left,
+                                          enabledBorder: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
                                         ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                    ],
-                                  ),
-                                ), // budget dates
-                                Container(
-                                  padding: EdgeInsets.only(top: 8, bottom: 8),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        "Shoot Days",
+                                    ),
+                                  ],
+                                ),
+                              ), // shoot days
+                              Container(
+                                padding: EdgeInsets.only(top: 8, bottom: 8, left: 24, right: 24),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      "Producers",
+                                      style: TextStyle(
+                                        fontFamily: "Inter",
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                        color: textColor,
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(top: 4),
+                                      height: 32,
+                                      child: TextField(
+                                        controller: _producersTC,
                                         style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontSize: 18,
+                                          fontFamily: "SegoeUI",
+                                          fontSize: 16,
                                           fontWeight: FontWeight.w400,
-                                          color: textColor,
+                                          color: Colors.grey[300],
                                         ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 4),
-                                        height: 32,
-                                        child: TextField(
-                                          controller: _daysTC,
-                                          keyboardType: TextInputType.number,
-                                          style: TextStyle(
+                                        decoration: InputDecoration(
+                                          hintText: "Tap to add producers name",
+                                          hintStyle: TextStyle(
                                             fontFamily: "SegoeUI",
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: Colors.grey[300],
+                                            color: subTextColor,
                                           ),
-                                          decoration: InputDecoration(
-                                            hintText: "Tap to add the number of shoot days",
-                                            hintStyle: TextStyle(
-                                              fontFamily: "SegoeUI",
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              color: subTextColor,
-                                            ),
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                          ),
-                                          textAlign: TextAlign.left,
+                                          enabledBorder: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
                                         ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                    ],
-                                  ),
-                                ), // shoot days
-                                Container(
-                                  padding: EdgeInsets.only(top: 8, bottom: 8),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        "Producers",
+                                    ),
+                                  ],
+                                ),
+                              ), // producers
+                              Container(
+                                padding: EdgeInsets.only(top: 8, bottom: 8, left: 24, right: 24),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      "Union",
+                                      style: TextStyle(
+                                        fontFamily: "Inter",
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                        color: textColor,
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(top: 4),
+                                      height: 32,
+                                      child: TextField(
+                                        controller: _unionTC,
                                         style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontSize: 18,
+                                          fontFamily: "SegoeUI",
+                                          fontSize: 16,
                                           fontWeight: FontWeight.w400,
-                                          color: textColor,
+                                          color: Colors.grey[300],
                                         ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 4),
-                                        height: 32,
-                                        child: TextField(
-                                          controller: _producersTC,
-                                          style: TextStyle(
+                                        decoration: InputDecoration(
+                                          hintText: "Tap to choose yes or no",
+                                          hintStyle: TextStyle(
                                             fontFamily: "SegoeUI",
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: Colors.grey[300],
+                                            color: subTextColor,
                                           ),
-                                          decoration: InputDecoration(
-                                            hintText: "Tap to add producers name",
-                                            hintStyle: TextStyle(
-                                              fontFamily: "SegoeUI",
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              color: subTextColor,
-                                            ),
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                          ),
-                                          textAlign: TextAlign.left,
+                                          enabledBorder: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
                                         ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                    ],
-                                  ),
-                                ), // producers
-                                Container(
-                                  padding: EdgeInsets.only(top: 8, bottom: 8),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        "Union",
+                                    ),
+                                  ],
+                                ),
+                              ), // union
+                              Container(
+                                padding: EdgeInsets.only(top: 8, bottom: 8, left: 24, right: 24),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      "Location",
+                                      style: TextStyle(
+                                        fontFamily: "Inter",
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                        color: textColor,
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(top: 4),
+                                      height: 32,
+                                      child: TextField(
+                                        controller: _locationTC,
                                         style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontSize: 18,
+                                          fontFamily: "SegoeUI",
+                                          fontSize: 16,
                                           fontWeight: FontWeight.w400,
-                                          color: textColor,
+                                          color: Colors.grey[300],
                                         ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 4),
-                                        height: 32,
-                                        child: TextField(
-                                          controller: _unionTC,
-                                          style: TextStyle(
+                                        decoration: InputDecoration(
+                                          hintText: "Tap to add location name",
+                                          hintStyle: TextStyle(
                                             fontFamily: "SegoeUI",
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: Colors.grey[300],
+                                            color: subTextColor,
                                           ),
-                                          decoration: InputDecoration(
-                                            hintText: "Tap to choose yes or no",
-                                            hintStyle: TextStyle(
-                                              fontFamily: "SegoeUI",
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              color: subTextColor,
-                                            ),
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                          ),
-                                          textAlign: TextAlign.left,
+                                          enabledBorder: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
                                         ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                    ],
-                                  ),
-                                ), // union
-                                Container(
-                                  padding: EdgeInsets.only(top: 8, bottom: 8),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        "Location",
-                                        style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w400,
-                                          color: textColor,
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 4),
-                                        height: 32,
-                                        child: TextField(
-                                          controller: _locationTC,
-                                          style: TextStyle(
-                                            fontFamily: "SegoeUI",
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.grey[300],
-                                          ),
-                                          decoration: InputDecoration(
-                                            hintText: "Tap to add location name",
-                                            hintStyle: TextStyle(
-                                              fontFamily: "SegoeUI",
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              color: subTextColor,
-                                            ),
-                                            enabledBorder: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ), // budget dates
-                              ],
-                            ),
+                                    ),
+                                  ],
+                                ),
+                              ), // budget dates
+                            ],
                           ),
                           Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -769,8 +772,43 @@ class _NewProjectState extends State<NewProject> with SingleTickerProviderStateM
     );
   }
 
+  // shows date picker
+  pickDate(BuildContext context) async {
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(DateTime.now().year),
+      lastDate: DateTime(DateTime.now().year + 10),
+      helpText: "Select budget date",
+      fieldLabelText: "Budget date",
+      fieldHintText: selectedDate.toString(),
+      builder: (context, child) {
+        return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.dark(
+                primary: textColor,
+                surface: backgroundColor,
+                onPrimary: Colors.white,
+                onSurface: Colors.white
+              ),
+              dialogBackgroundColor: backgroundColor
+            ),
+            child: child!,
+        );
+      }
+    );
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+
+  }
+
   void saveProject() {
-    Projects projects = new Projects("Project $projectCount", _companyTC.text, _titleTC.text, _prepareTC.text, _dateTC.text, int.parse(_daysTC.text), _producersTC.text, _unionTC.text, _locationTC.text);
+    Projects projects = new Projects("Project $currentProjectNum", _companyTC.text, _titleTC.text, _prepareTC.text, DateFormat('dd/MM/yy').format(selectedDate).toString(), int.parse(_daysTC.text), _producersTC.text, _unionTC.text, _locationTC.text);
     Budget budgets = new Budget(_atl, _pE, _pPE, _oE);
 
 

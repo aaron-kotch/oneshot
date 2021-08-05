@@ -10,14 +10,6 @@ import 'package:oneshot/pageRoutes.dart';
 
 import 'CustomExpandIcon.dart';
 
-// import 'constants.dart';
-// import 'expand_icon.dart';
-// import 'ink_well.dart';
-// import 'material_localizations.dart';
-// import 'mergeable_material.dart';
-// import 'shadows.dart';
-// import 'theme.dart';
-
 const double _kPanelHeaderCollapsedHeight = kMinInteractiveDimension;
 const EdgeInsets _kPanelHeaderExpandedDefaultPadding = EdgeInsets.symmetric(
   vertical: 64.0 - _kPanelHeaderCollapsedHeight,
@@ -84,10 +76,7 @@ class CustomExpansionPanel {
     this.isExpanded = false,
     this.canTapOnHeader = false,
     this.backgroundColor,
-  }) : assert(headerBuilder != null),
-        assert(body != null),
-        assert(isExpanded != null),
-        assert(canTapOnHeader != null);
+  });
 
   /// The widget builder that builds the expansion panels' header.
   final ExpansionPanelHeaderBuilder headerBuilder;
@@ -109,8 +98,7 @@ class ExpansionPanelRadio extends CustomExpansionPanel {
     required Widget body,
     bool canTapOnHeader = false,
     Color? backgroundColor,
-  }) : assert(value != null),
-        super(
+  }) : super(
         body: body,
         headerBuilder: headerBuilder,
         canTapOnHeader: canTapOnHeader,
@@ -132,9 +120,7 @@ class CustomExpansionPanelList extends StatefulWidget {
     this.expandedHeaderPadding = _kPanelHeaderExpandedDefaultPadding,
     this.dividerColor,
     this.elevation = 2,
-  }) : assert(children != null),
-        assert(animationDuration != null),
-        _allowOnlyOnePanelOpen = false,
+  }) : _allowOnlyOnePanelOpen = false,
         initialOpenPanelValue = null,
         super(key: key);
 
@@ -147,9 +133,7 @@ class CustomExpansionPanelList extends StatefulWidget {
     this.expandedHeaderPadding = _kPanelHeaderExpandedDefaultPadding,
     this.dividerColor,
     this.elevation = 2,
-  }) : assert(children != null),
-        assert(animationDuration != null),
-        _allowOnlyOnePanelOpen = true,
+  }) : _allowOnlyOnePanelOpen = true,
         super(key: key);
 
   /// The children of the expansion panel list. They are laid out in a similar
@@ -287,6 +271,7 @@ class _CustomExpansionPanelListState extends State<CustomExpansionPanelList> {
         _isChildExpanded(index),
       );
 
+      // arrow icon (beside app bar title)
       Widget expandIconContainer = Container(
         margin: const EdgeInsetsDirectional.only(end: 0.0),
         child: CustomExpandIcon(
@@ -298,6 +283,7 @@ class _CustomExpansionPanelListState extends State<CustomExpansionPanelList> {
         ),
       );
 
+      // left side icon of the appbar
       Widget leadingIconContainer = Container(
         margin: const EdgeInsetsDirectional.only(end: 0.0),
         child: CustomExpandIcon(
@@ -312,6 +298,7 @@ class _CustomExpansionPanelListState extends State<CustomExpansionPanelList> {
         ),
       );
 
+      // right side icon of the appbar
       Widget trailingIconContainer = Container(
         margin: const EdgeInsetsDirectional.only(end: 0.0),
         child: CustomExpandIcon(
@@ -334,6 +321,7 @@ class _CustomExpansionPanelListState extends State<CustomExpansionPanelList> {
           child: expandIconContainer,
         );
       }
+
       Widget header = Row(
         children: <Widget>[
           Expanded(
@@ -348,6 +336,7 @@ class _CustomExpansionPanelListState extends State<CustomExpansionPanelList> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    // custom here
                     Padding(
                       padding: const EdgeInsets.only(left: 12),
                       child: leadingIconContainer

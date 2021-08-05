@@ -1,15 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oneshot/aboveTheLine.dart';
-import 'package:oneshot/classes/BudgetDetails.dart';
-import 'package:oneshot/projectBottomSheet.dart';
-import 'package:oneshot/newSubBudgetTile.dart';
+import 'package:oneshot/custom_widgets/projectBottomSheet.dart';
+import 'package:oneshot/tiles/newSubBudgetTile.dart';
 
 class NewPostProduction extends StatefulWidget {
   const NewPostProduction({Key? key, required this.list, required this.projectIndex}) : super(key: key);
 
-  final list;
+  final List list;
   final int projectIndex;
 
   @override
@@ -18,11 +16,11 @@ class NewPostProduction extends StatefulWidget {
 
 class _NewPostProductionState extends State<NewPostProduction> {
 
-  Color textColor = Color(0xffD2480A);
-  Color subTextColor = Color(0xff999999);
-  Color borderColor = Color(0xff0E0E0E);
+  final Color textColor = const Color(0xffD2480A);
+  final Color subTextColor = const Color(0xff999999);
+  final Color borderColor = const Color(0xff0E0E0E);
 
-  List<List<TextEditingController>> _textController = [];
+  late final List<List<TextEditingController>> _textController;
 
   @override
   void dispose() {
@@ -38,7 +36,6 @@ class _NewPostProductionState extends State<NewPostProduction> {
   @override
   void initState() {
     super.initState();
-
     _textController = new List.generate(widget.list.length, (index) => [new TextEditingController(), new TextEditingController()]);
   }
 
@@ -50,9 +47,6 @@ class _NewPostProductionState extends State<NewPostProduction> {
         systemNavigationBarIconBrightness: Brightness.light
     ));
 
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xff1E1E1E),
@@ -61,26 +55,23 @@ class _NewPostProductionState extends State<NewPostProduction> {
             children: <Widget>[
               Container(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 28, left: 16, right: 16, bottom: 16),
+                  padding: const EdgeInsets.only(top: 28, left: 16, right: 16, bottom: 16),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back_ios_rounded,
                           size: 20,
                           color: Colors.white,
                         ),
                         onPressed: () {
-                          setState(() {
-
-                          });
                           Navigator.pop(context);
                         },
                       ),
                       Container(
-                        child: Text(
+                        child: const Text(
                           'Above The Line',
                           style: TextStyle(
                             fontFamily: 'Calibri',
@@ -91,7 +82,7 @@ class _NewPostProductionState extends State<NewPostProduction> {
                         ),
                       ),
                       IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.keyboard_control_rounded,
                           size: 20,
                           color: Colors.white,

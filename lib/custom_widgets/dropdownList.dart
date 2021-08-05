@@ -1,23 +1,14 @@
 import 'package:flutter/material.dart';
 
-class DropdownList extends StatefulWidget {
+class DropdownList extends StatelessWidget {
   const DropdownList({Key? key}) : super(key: key);
 
-  @override
-  _DropdownListState createState() => _DropdownListState();
-}
-
-class _DropdownListState extends State<DropdownList> {
-
-  Color textColor = Color(0xffD5754A);
-  Color orangeAccent = Color(0xffD5754A);
-  Color baseColor = Color(0xff1E1E1E);
+  final Color textColor = const Color(0xffD5754A);
+  final Color orangeAccent = const Color(0xffD5754A);
+  final Color baseColor = const Color(0xff1E1E1E);
 
   @override
   Widget build(BuildContext context) {
-
-    var width = MediaQuery.of(context).size.width;
-
     return Column(
       children: [
         ListTile(

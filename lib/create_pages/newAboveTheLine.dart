@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oneshot/aboveTheLine.dart';
-import 'package:oneshot/classes/BudgetDetails.dart';
-import 'package:oneshot/projectBottomSheet.dart';
-import 'package:oneshot/newSubBudgetTile.dart';
+import 'package:oneshot/custom_widgets/projectBottomSheet.dart';
+import 'package:oneshot/tiles/newSubBudgetTile.dart';
 
 class NewAboveTheLine extends StatefulWidget {
   const NewAboveTheLine({Key? key, required this.list, required this.projectIndex}) : super(key: key);
@@ -18,13 +16,13 @@ class NewAboveTheLine extends StatefulWidget {
 
 class _NewAboveTheLineState extends State<NewAboveTheLine> {
 
-  Color textColor = Color(0xffD2480A);
-  Color subTextColor = Color(0xff999999);
-  Color borderColor = Color(0xff0E0E0E);
+  final Color textColor = const Color(0xffD2480A);
+  final Color subTextColor = const Color(0xff999999);
+  final Color borderColor = const Color(0xff0E0E0E);
 
-  List<List<TextEditingController>> _textController = [];
+  late final List<List<TextEditingController>> _textController;
 
-  List<String> titleList = ["Development Rights", "Story & Rights", "Director & Staff", "Cast", "Travel & Living"];
+  final List<String> titleList = ["Development Rights", "Story & Rights", "Director & Staff", "Cast", "Travel & Living"];
 
   @override
   void dispose() {
@@ -39,7 +37,6 @@ class _NewAboveTheLineState extends State<NewAboveTheLine> {
   @override
   void initState() {
     super.initState();
-
     _textController = new List.generate(titleList.length, (index) => [new TextEditingController(), new TextEditingController()]);
   }
 
@@ -50,9 +47,6 @@ class _NewAboveTheLineState extends State<NewAboveTheLine> {
         systemNavigationBarColor: Color(0xff171717),
         systemNavigationBarIconBrightness: Brightness.light
     ));
-
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
 
     return SafeArea(
       child: Scaffold(

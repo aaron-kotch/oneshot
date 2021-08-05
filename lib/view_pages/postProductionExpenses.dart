@@ -1,42 +1,43 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oneshot/classes/BudgetDetails.dart';
-import 'package:oneshot/newSubBudgetTile.dart';
-import 'package:oneshot/projectBottomSheet.dart';
-import 'package:oneshot/subBudgetTile.dart';
+import 'package:oneshot/pageRoutes.dart';
+import 'package:oneshot/custom_widgets/projectBottomSheet.dart';
+import 'package:oneshot/tiles/subBudgetTile.dart';
 
-class NewOtherExpenses extends StatefulWidget {
-  const NewOtherExpenses({Key? key, required this.list, required this.projectIndex}) : super(key: key);
+import '../classes/BudgetDetails.dart';
 
-  final List<BudgetDetails> list;
+class PostProductionExpenses extends StatefulWidget {
+  PostProductionExpenses({Key? key, required this.projectIndex}) : super(key: key);
+
   final int projectIndex;
 
+  final List<BudgetDetails> postProductionList = [
+    BudgetDetails(title: "Film Editing"),
+    BudgetDetails(title: "Music"),
+    BudgetDetails(title: "Visual Effects"),
+    BudgetDetails(title: "Post Production Sounds"),
+    BudgetDetails(title: "Post Production Film & Lab"),
+  ];
+
   @override
-  _NewOtherExpensesState createState() => _NewOtherExpensesState();
+  _PostProductionExpensesState createState() => _PostProductionExpensesState();
 }
 
-class _NewOtherExpensesState extends State<NewOtherExpenses> {
-  Color textColor = Color(0xffD2480A);
-  Color subTextColor = Color(0xff999999);
-  Color borderColor = Color(0xff0E0E0E);
+class _PostProductionExpensesState extends State<PostProductionExpenses> {
 
-  List<List<TextEditingController>> _textController = [];
+  final Color textColor = const Color(0xffD2480A);
+  final Color subTextColor = const Color(0xff999999);
+  final Color borderColor = const Color(0xff0E0E0E);
 
   @override
   void dispose() {
     super.dispose();
-    for (var x in _textController) {
-      for (var y in x) {
-        y.dispose();
-      }
-    }
   }
 
   @override
   void initState() {
     super.initState();
-
-    _textController = new List.generate(widget.list.length, (index) => [new TextEditingController(), new TextEditingController()]);
   }
 
   @override
@@ -72,7 +73,7 @@ class _NewOtherExpensesState extends State<NewOtherExpenses> {
                       ),
                       Container(
                         child: Text(
-                          'Other Expenses',
+                          'Post Production Expenses',
                           style: TextStyle(
                             fontFamily: 'Calibri',
                             fontWeight: FontWeight.w300,
@@ -101,19 +102,16 @@ class _NewOtherExpensesState extends State<NewOtherExpenses> {
                 ),
               ), // top
               Expanded(
-                child: Container(
-                  padding: EdgeInsets.only(top: 32),
-                  child: ListView.builder(
-                      itemCount: widget.list.length,
-                      itemBuilder: (context, index) {
-                        return NewSubBudgetTile(
-                            title: widget.list[index].title,
-                            payeeController: _textController[index][0],
-                            amountController: _textController[index][1],
-                            list: widget.list
-                        );
-                      }
-                  ),
+                child: ListView.builder(
+                  padding: EdgeInsets.only(top: 20, bottom: 20),
+                  itemCount: widget.postProductionList.length,
+                  itemBuilder: (context, index) {
+                    return SubBudgetTile(
+                      title: widget.postProductionList[index].title,
+                      payee: widget.postProductionList[index].totalPayee == "0" ? "-" : widget.postProductionList[index].totalPayee,
+                      amount: widget.postProductionList[index].totalAmount == "0" ? "-" : widget.postProductionList[index].totalAmount,
+                    );
+                  }
                 ),
               ),
               Container(
@@ -156,7 +154,11 @@ class _NewOtherExpensesState extends State<NewOtherExpenses> {
                     ),
                     IconButton(
                         onPressed: () {
+                          Navigator.of(context).push(toNewPostProductionExpenses(widget.postProductionList, widget.projectIndex)).then((value) {
+                            setState(() {
 
+                            });
+                          });
                         },
                         icon: Icon(
                           Icons.add_circle,

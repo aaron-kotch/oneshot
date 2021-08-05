@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oneshot/classes/BudgetDetails.dart';
 import 'package:oneshot/pageRoutes.dart';
-import 'package:oneshot/projectBottomSheet.dart';
-import 'package:oneshot/subBudgetTile.dart';
+import 'package:oneshot/custom_widgets/projectBottomSheet.dart';
+import 'package:oneshot/tiles/subBudgetTile.dart';
 
 class AboveTheLine extends StatefulWidget {
 
   AboveTheLine({Key? key, required this.projectIndex}) : super(key: key);
 
-  final projectIndex;
+  final int projectIndex;
 
-  List<BudgetDetails> list = [
+  final List<BudgetDetails> list = [
     new BudgetDetails(title: "Development Rights"),
     new BudgetDetails(title: "Story & Rights"),
     new BudgetDetails(title: "Director & Staff"),
@@ -20,28 +20,15 @@ class AboveTheLine extends StatefulWidget {
     new BudgetDetails(title: "Travel & Living"),
   ];
 
-  List<BudgetDetails> get itemList => itemList;
-
   @override
   _AboveTheLineState createState() => _AboveTheLineState();
 }
 
 class _AboveTheLineState extends State<AboveTheLine> {
 
-  Color textColor = Color(0xffD2480A);
-  Color subTextColor = Color(0xff999999);
-  Color borderColor = Color(0xff0E0E0E);
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-  }
+  final Color textColor = const Color(0xffD2480A);
+  final Color subTextColor = const Color(0xff999999);
+  final Color borderColor = const Color(0xff0E0E0E);
 
   @override
   Widget build(BuildContext context) {

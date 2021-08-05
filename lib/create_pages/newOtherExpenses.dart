@@ -1,35 +1,42 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oneshot/classes/BudgetDetails.dart';
-import 'package:oneshot/newSubBudgetTile.dart';
-import 'package:oneshot/pageRoutes.dart';
-import 'package:oneshot/projectBottomSheet.dart';
-import 'package:oneshot/subBudgetTile.dart';
+import 'package:oneshot/tiles/newSubBudgetTile.dart';
+import 'package:oneshot/custom_widgets/projectBottomSheet.dart';
 
-class OtherExpenses extends StatefulWidget {
-  OtherExpenses({Key? key, required this.projectIndex}) : super(key: key);
+class NewOtherExpenses extends StatefulWidget {
+  const NewOtherExpenses({Key? key, required this.list, required this.projectIndex}) : super(key: key);
 
+  final List<BudgetDetails> list;
   final int projectIndex;
 
-  List<BudgetDetails> otherList = [
-    BudgetDetails(title: "Publicity"),
-    BudgetDetails(title: "Legal & Accounting"),
-    BudgetDetails(title: "General Expenses"),
-    BudgetDetails(title: "Insurance"),
-  ];
-
-  List<BudgetDetails> get itemList => otherList;
-
   @override
-  _OtherExpensesState createState() => _OtherExpensesState();
+  _NewOtherExpensesState createState() => _NewOtherExpensesState();
 }
 
-class _OtherExpensesState extends State<OtherExpenses> {
+class _NewOtherExpensesState extends State<NewOtherExpenses> {
   Color textColor = Color(0xffD2480A);
   Color subTextColor = Color(0xff999999);
   Color borderColor = Color(0xff0E0E0E);
+
+  late final List<List<TextEditingController>> _textController;
+
+  @override
+  void dispose() {
+    super.dispose();
+    for (var x in _textController) {
+      for (var y in x) {
+        y.dispose();
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _textController = new List.generate(widget.list.length, (index) => [new TextEditingController(), new TextEditingController()]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,14 +103,16 @@ class _OtherExpensesState extends State<OtherExpenses> {
                 child: Container(
                   padding: EdgeInsets.only(top: 32),
                   child: ListView.builder(
-                    itemCount: widget.otherList.length,
-                    itemBuilder: (context, index) {
-                      return SubBudgetTile(
-                          title: widget.otherList[index].title,
-                        payee: widget.otherList[index].totalPayee == "0" ? "-" : widget.otherList[index].totalPayee,
-                        amount: widget.otherList[index].totalAmount == "0" ? "-" : widget.otherList[index].totalAmount,
-                      );
-                    }
+                      itemCount: widget.list.length,
+                      itemBuilder: (context, index) {
+                        return NewSubBudgetTile(
+                            title: widget.list[index].title,
+                            payeeController: _textController[index][0],
+                            amountController: _textController[index][1],
+                            index: index,
+                            list: widget.list
+                        );
+                      }
                   ),
                 ),
               ),
@@ -147,11 +156,7 @@ class _OtherExpensesState extends State<OtherExpenses> {
                     ),
                     IconButton(
                         onPressed: () {
-                          Navigator.of(context).push(toNewOtherExpenses(widget.otherList, widget.projectIndex)).then((value) {
-                            setState(() {
 
-                            });
-                          });
                         },
                         icon: Icon(
                           Icons.add_circle,

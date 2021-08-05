@@ -1,7 +1,7 @@
-import 'package:oneshot/aboveTheLine.dart';
-import 'package:oneshot/otherExpenses.dart';
-import 'package:oneshot/postProductionExpenses.dart';
-import 'package:oneshot/productionExpenses.dart';
+import 'package:oneshot/view_pages/aboveTheLine.dart';
+import 'package:oneshot/view_pages/otherExpenses.dart';
+import 'package:oneshot/view_pages/postProductionExpenses.dart';
+import 'package:oneshot/view_pages/productionExpenses.dart';
 
 class Budget {
 

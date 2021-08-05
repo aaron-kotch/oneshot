@@ -1,6 +1,6 @@
 class Projects {
 
-  final String projectName;
+  String projectName;
   final String company;
   final String title;
   final String prepareBy;

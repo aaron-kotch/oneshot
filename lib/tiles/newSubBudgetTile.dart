@@ -1,30 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:oneshot/aboveTheLine.dart';
-import 'package:oneshot/newAboveTheLine.dart';
 
-class NewSubBudgetTile extends StatefulWidget {
+class NewSubBudgetTile extends StatelessWidget {
 
-  NewSubBudgetTile({Key? key, required this.title, required this.payeeController, required this.amountController, this.index = 0, required this.list}) : super(key: key);
+  const NewSubBudgetTile({Key? key, required this.title, required this.payeeController, required this.amountController, required this.index, required this.list}) : super(key: key);
 
   final String title;
   final TextEditingController payeeController;
   final TextEditingController amountController;
   final List<dynamic> list;
-  int index;
+  final int index;
 
-  @override
-  _NewSubBudgetTileState createState() => _NewSubBudgetTileState();
-}
-
-class _NewSubBudgetTileState extends State<NewSubBudgetTile> {
   @override
   Widget build(BuildContext context) {
 
-    Color textColor = Color(0xffD2480A);
-    Color subTextColor = Color(0xff999999);
-
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    final Color textColor = const Color(0xffD2480A);
+    final Color subTextColor = const Color(0xff999999);
+    final double width = MediaQuery.of(context).size.width;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
@@ -38,7 +29,7 @@ class _NewSubBudgetTileState extends State<NewSubBudgetTile> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Text(
-                  widget.title,
+                  this.title,
                   style: TextStyle(
                     fontFamily: "Inter",
                     fontWeight: FontWeight.w400,
@@ -80,10 +71,10 @@ class _NewSubBudgetTileState extends State<NewSubBudgetTile> {
                 padding: const EdgeInsets.only(left: 8),
                 width: 200,
                 child: TextField(
-                  controller: widget.payeeController,
+                  controller: this.payeeController,
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
-                    widget.list[widget.index].totalPayee = value;
+                    this.list[this.index].totalPayee = value;
                   },
                   style: TextStyle(
                     fontFamily: "SegoeUI",
@@ -122,7 +113,7 @@ class _NewSubBudgetTileState extends State<NewSubBudgetTile> {
                 padding: const EdgeInsets.only(left: 8),
                 width: 200,
                 child: TextField(
-                  controller: widget.amountController,
+                  controller: this.amountController,
                   keyboardType: TextInputType.number,
                   style: TextStyle(
                     fontFamily: "SegoeUI",
@@ -131,7 +122,7 @@ class _NewSubBudgetTileState extends State<NewSubBudgetTile> {
                     color: subTextColor,
                   ),
                   onChanged: (value) {
-                    widget.list[widget.index].totalAmount = value;
+                    this.list[this.index].totalAmount = value;
                   },
                   decoration: InputDecoration(
                       hintText: "Total Amount",
@@ -154,4 +145,5 @@ class _NewSubBudgetTileState extends State<NewSubBudgetTile> {
       ),
     );
   }
+
 }

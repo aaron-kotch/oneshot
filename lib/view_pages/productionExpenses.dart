@@ -1,19 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:oneshot/newSubBudgetTile.dart';
 import 'package:oneshot/pageRoutes.dart';
-import 'package:oneshot/projectBottomSheet.dart';
-import 'package:oneshot/subBudgetTile.dart';
+import 'package:oneshot/custom_widgets/projectBottomSheet.dart';
+import 'package:oneshot/tiles/subBudgetTile.dart';
 
-import 'classes/BudgetDetails.dart';
+import '../classes/BudgetDetails.dart';
 
 class ProductionExpenses extends StatefulWidget {
   ProductionExpenses({Key? key, required this.projectIndex}) : super(key: key);
 
   final int projectIndex;
 
-  List<List<BudgetDetails>> productionBudgetList = [
+  final List<List<BudgetDetails>> productionBudgetList = [
     [
       new BudgetDetails(title: "Production Staff"),
       new BudgetDetails(title: "Extra Talent"),
@@ -42,20 +41,18 @@ class ProductionExpenses extends StatefulWidget {
     ]
   ];
 
-  List<List<BudgetDetails>> get itemList => productionBudgetList;
-
   @override
   _ProductionExpensesState createState() => _ProductionExpensesState();
 }
 
 class _ProductionExpensesState extends State<ProductionExpenses> {
 
-  PageController _pageController = new PageController(initialPage: 0);
+  final PageController _pageController = new PageController(initialPage: 0);
   double pageIndex = 0.0;
 
-  Color textColor = Color(0xffD2480A);
-  Color subTextColor = Color(0xff999999);
-  Color borderColor = Color(0xff0E0E0E);
+  final Color textColor = const Color(0xffD2480A);
+  final Color subTextColor = const Color(0xff999999);
+  final Color borderColor = const Color(0xff0E0E0E);
 
   @override
   void dispose() {
@@ -184,7 +181,7 @@ class _ProductionExpensesState extends State<ProductionExpenses> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_back_ios_rounded,
                           size: 20,
                           color: Colors.white,
@@ -194,7 +191,7 @@ class _ProductionExpensesState extends State<ProductionExpenses> {
                         },
                       ),
                       Container(
-                        child: Text(
+                        child: const Text(
                           'Production Expenses',
                           style: TextStyle(
                             fontFamily: 'Calibri',
@@ -205,7 +202,7 @@ class _ProductionExpensesState extends State<ProductionExpenses> {
                         ),
                       ),
                       IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.keyboard_control_rounded,
                           size: 20,
                           color: Colors.white,

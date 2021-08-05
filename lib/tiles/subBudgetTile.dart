@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SubBudgetTile extends StatefulWidget {
+class SubBudgetTile extends StatelessWidget {
 
   SubBudgetTile({Key? key, required this.title, required this.payee, required this.amount}) : super(key: key);
 
@@ -8,19 +8,13 @@ class SubBudgetTile extends StatefulWidget {
   final String payee;
   final String amount;
 
-  @override
-  _SubBudgetTileState createState() => _SubBudgetTileState();
-}
+  final Color textColor = const Color(0xffD2480A);
+  final Color subTextColor = const Color(0xff999999);
 
-class _SubBudgetTileState extends State<SubBudgetTile> {
   @override
   Widget build(BuildContext context) {
 
-    Color textColor = Color(0xffD2480A);
-    Color subTextColor = Color(0xff999999);
-
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
@@ -34,7 +28,7 @@ class _SubBudgetTileState extends State<SubBudgetTile> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Text(
-                  widget.title,
+                  this.title,
                   style: TextStyle(
                     fontFamily: "Inter",
                     fontWeight: FontWeight.w400,
@@ -77,7 +71,7 @@ class _SubBudgetTileState extends State<SubBudgetTile> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    widget.payee,
+                    this.payee,
                     style: TextStyle(
                       fontFamily: "SegoeUI",
                       fontWeight: FontWeight.w400,
@@ -104,7 +98,7 @@ class _SubBudgetTileState extends State<SubBudgetTile> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    widget.amount,
+                    this.amount,
                     style: TextStyle(
                       fontFamily: "SegoeUI",
                       fontWeight: FontWeight.w400,
@@ -120,4 +114,5 @@ class _SubBudgetTileState extends State<SubBudgetTile> {
       ),
     );
   }
+
 }
